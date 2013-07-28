@@ -20,9 +20,8 @@ app.configure 'production', ->
   app.set 'db-uri', 'mongodb://localhost/db-prod'
 
 
-# configure the application
 # keep in mind the order of registration matters for the middleware.
-# we also use 2 view engine so we can use haml, but we can't use it fully
+# we also use 2 view engines so we can use haml(besides jade), but we can't use it fully
 # because of some drawbacks/quirks in hamljs
 app.engine 'jade', require('jade').__express
 app.engine 'haml', engines.haml

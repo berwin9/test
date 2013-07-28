@@ -47,10 +47,10 @@ module.exports = (app) ->
   routes = {}
 
   routes.index = (req, res) ->
-    res.render 'index.jade', title: title
+    res.render 'index.jade'
 
   routes.loginGet = (req, res) ->
-    res.render 'login.jade', title: title
+    res.render 'login.jade'
 
   routes.loginPost = (req, res) ->
     email = req.body['login-email']
