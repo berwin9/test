@@ -9,9 +9,14 @@
   app = angular.module('test');
 
   app.controller('NotificationCtrl', [
-    'BootstrapService', function(BootstrapService) {
+    '$timeout', 'BootstrapService', function($timeout, BootstrapService) {
       var _this = this;
       this.alerts = BootstrapService.get();
+      $timeout((function() {
+        if (_this.alerts != null) {
+          return _this.alerts.length = 0;
+        }
+      }), 5000);
       this.hasNotifications = function() {
         var _ref;
         return !!((_ref = _this.alerts) != null ? _ref.length : void 0);

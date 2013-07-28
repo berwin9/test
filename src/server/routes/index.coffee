@@ -29,9 +29,10 @@ module.exports = (app) ->
         else
           console.log 'bad'
           res.render 'login.jade',
+            title: 'Quizerfoo'
             bootstrap:
               notifications: [
-                new Notification('alert-danger', 'Bad Email or Password.')
+                new Notification('alert-danger', 'Bad Email or Password used on Login Form.')
               ]
 
   routes.logout = (req, res) ->
@@ -48,8 +49,9 @@ module.exports = (app) ->
         console.log 'errrrr hereererererere'
         res.render 'login.jade',
           bootstrap:
+            title: 'Quizerfoo'
             notifications: [
-              new Notification('alert-danger', 'Account creation failed.')
+              new Notification('alert-danger', 'Account creation failed on Registration Form.')
             ]
       req.session.userId = user.id
       res.redirect '/'

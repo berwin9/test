@@ -3,22 +3,22 @@ extends layout
 block content
   .row
     .span6
-      form#login-form(method='POST', action='/login')
+      form#login-form(method="POST", action="/login")
         legend Login Form
         .control-group
-          label(for='email') E-mail
-          input(type='text', value='', placeholder='Enter your email', id='email', name: 'email')
+          label(for="email") E-mail
+          input(type="text", value="", placeholder="Enter your email", id="email", name: "email")
         .control-group
-          label(for='password') Password
-          input(type='password', value='', placeholder='Enter your password', id='password', name='password')
-        input.btn.btn-primary(type='submit', value='Login')
+          label(for="password") Password
+          input(type="password", value="", placeholder="Enter your password", id="password", name="password")
+        input.btn.btn-primary(type="submit", value="Login")
     .span6
-      form#register-form.pull-right(method='POST', action='/register')
+      form#register-form.pull-right(method="POST", action="/register")
         legend Registration Form
         .control-group
-          label(for='email') E-mail
-          input(type='text', value='', placeholder='Enter your email', id='email', name='email')
+          label(for="email") E-mail
+          input(type="text", value="", placeholder="Enter your email", id="email", name="email")
         .control-group
-          label(for='password') Password
-          input(type='password', value='', placeholder='Enter your password', id='password', name='password')
-        input.btn.btn-primary(type='submit', value='Register')
+          label(for="password") Password
+          input(type="password", value="", placeholder="Enter your password", id="password", name="password")
+        input.btn.btn-primary(type="submit", value="Register")
