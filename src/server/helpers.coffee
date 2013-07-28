@@ -39,4 +39,12 @@ module.exports = (app) ->
     else
       res.redirect '/login'
 
+  simpleErrorHandler = helpers.simpleErrorHandler = (err, req, res, next) ->
+    console.log err?.stack
+    if err?.stack
+      res.render '500.jade', status: 500
+
+  throwError = helpers.throwError = ->
+    throw new Error()
+
   helpers

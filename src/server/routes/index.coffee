@@ -64,7 +64,6 @@ module.exports = (app) ->
       else noUserFound(req, res)
 
   routes.logout = (req, res) ->
-    console.log req
     if req.session?
       app.LoginTokenModel.remove email: req.currentUser.email, ->
       res.clearCookie 'loginToken'
@@ -72,12 +71,14 @@ module.exports = (app) ->
     res.redirect '/login'
 
   routes.register = (req, res) ->
-    user = new app.UserModel(
+    user = new app.UserModel
       email: req.body['registration-email']
       password: req.body['registration-password']
-    )
     user.save (err) ->
       throw err if err?
       authenticate(req, res, user)
+
+  routes.throwError = (req, res) ->
+    throw Error()
 
   routes

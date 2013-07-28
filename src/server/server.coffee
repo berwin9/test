@@ -39,7 +39,7 @@ app.use express.logger()
 app.use express.methodOverride()
 app.use app.router
 app.use express.static(__dirname + '/public')
-
+app.use helpers.simpleErrorHandler
 
 # we need to pass in mongoose since the models actually
 # need to register themselves to mongoose then we can assign and use
@@ -55,9 +55,7 @@ app.get '/login', routes.loginGet
 app.get '/logout', helpers.loadUser, routes.logout
 app.post '/login', routes.loginPost
 app.post '/register', routes.register
-app.get '/404', routes.handler404
-app.get '/500', routes.handler500
-
+app.get '/:others', helpers.throwError
 
 port = process.env.PORT || 5000
 app.listen port, -> console.log 'Listening on ' + port
