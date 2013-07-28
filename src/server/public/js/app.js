@@ -1,5 +1,7 @@
 //@ sourceMappingURL=app.map
 (function() {
-  console.log('this is a test');
+  var app;
+
+  app = angular.module('demo', []);
 
 }).call(this);

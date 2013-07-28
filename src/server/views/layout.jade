@@ -23,5 +23,9 @@ html(class='no-js', lang='en')
             ul.nav
               li
                 a(href="#") Quizerfoo
+    #notifications-container(data-ng-controller='NotificationsCtrl as notification')
+      div.alert(data-ng-repeat='item in notifications.alerts', data-ng-class='item.type')
     .container
       block content
+    script(src='/js/libs.js')
+    script(src='/js/app.js')
