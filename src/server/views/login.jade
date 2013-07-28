@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  .row
+    .span7
+      .control-group
+        label(for='username') Username
+        input(type='text', value='', placeholder='Enter your username', id='username')
+      .control-group
+        label(for='password') Password
+        input(type='password', value='', placeholder='Enter your password', id='password')
+      .row
+        .span1
+          a.btn.btn-primary.btn-large(href='/login') Login
+        .span1
+          a.btn.btn-large(href='/register') Register
