@@ -6,9 +6,6 @@
     "predeploy": "grunt",
     "start": "node app.coffee"
   },
-  "engines": {
-    "node": "0.8.x"
-  },
   "dependencies": {
     "express": "3.1.2",
     "consolidate": "0.9.1",
