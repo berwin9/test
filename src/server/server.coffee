@@ -1,81 +1,70 @@
 express = require 'express'
 routes = require './routes'
-passport = require 'passport'
-flash = require 'connect-flash'
 engines = require 'consolidate'
-LocalStrategy = require('passport-local').Strategy
+mongoose = require 'mongoose'
+mongoStore = require 'connect-mongodb'
 
-users = [
-  id: 1, username: 'erwin', password: 'password', email: 'win@example.com'
-]
-
-findById = (id, fn) ->
-  idx = id - 1
-  if users[idx]?
-    fn null, users[idx]
-  else
-    fn new Error('User #{id} does not exist')
-
-findByUsername = (username, fn) ->
-  for user in users when user.username is username
-    return fn null, user
-  return fn null, null
-
-ensureAuthenticated = (req, res, next) ->
-  if req.isAuthenticated() then return next
-  res.redirect '/login'
-
-passport.serializeUser((user, done) -> done null, user.id)
-
-passport.deserializeUser (id, done) ->
-  findById(id, (err, user) -> done err, user)
-
-passport.use new LocalStrategy(
-  (username, password, done) ->
-    process.nextTick ->
-      findByUsername username, (err, usr) ->
-        if err? then return done err
-        if not user?
-          return done null, false, message: 'Unknown user #{username}'
-        if user.password is not password
-          return done null, false, message: 'Invalid password'
-        return done null, user
-)
-
-
+models = require './models'
 
 app = express()
 app.use express.logger()
 
-port = process.env.PORT || 5000
+UserModel = null
+LoginTokenModel = null
+db = null
 
+checkUser = (req, res, next) ->
+  if req.session.user_id
+    UserModel.findById req.session.user_id, (err, user) ->
+      if user
+        req.currentUser = user
+        next()
+      else
+        res.redirect '/login'
+  else if req.cookies.logintoken
+    authenticateFromLoginToken req, res, next
+  else
+    res.redirect '/login'
+
+# configure the application, the order of registration matters
+# for the middleware
 app.engine 'jade', require('jade').__express
 app.engine 'haml', engines.haml
 app.set 'views', __dirname + '/views'
 app.use express.logger()
 app.use express.cookieParser()
 app.use express.bodyParser()
-app.use express.methodOverride()
 app.use express.session(secret: 'secret password')
-app.use flash()
-app.use passport.initialize()
-app.use passport.session()
+app.use express.session(
+  cookie:
+    maxAge: 60000 * 30
+  store: new mongoStore(app.set 'db-uri')
+  secret: 'super secret password'
+)
+app.use express.methodOverride()
 app.use app.router
 app.use express.static(__dirname + '/public')
 
+app.configure 'development', ->
+  app.set 'db-uri', 'mongodb://localhost/db-development'
+  app.use express.errorHandler(dumpExceptions: true)
+  app.set 'view options', pretty: true
 
-app.get '/', routes.index
+app.configure 'production', ->
+  app.set 'db-uri', 'mongodb://localhost/db-production'
+
+
+models.init ->
+  UserModel = mongoose.model 'UserModel'
+  LoginTokenModel = mongoose.model 'LoginTokenModel'
+  db = mongoose.connect app.set('db-uri')
+
+app.get '/', checkUser, routes.index
 app.get '/register', routes.register
 app.get '/recover-password', routes.recoverPassword
-app.get '/login', routes.login
-app.get '/logut', routes.logout
-app.post(
-  '/login',
-  passport.authenticate(
-    'local',
-    { successRedirect: '/', failureRedirect: '/login', failureFlash: true },
-    (req, res) -> res.redirect '/'
-  )
-)
+app.get '/login', routes.loginGet
+app.get '/logout', routes.logout
+app.post '/login', routes.loginPost
 
+port = process.env.PORT || 5000
 app.listen port, -> console.log 'Listening on ' + port

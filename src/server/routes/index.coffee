@@ -1,8 +1,10 @@
 exports.index = (req, res) ->
   res.render 'index.jade', title: 'Express'
 
-exports.login = (req, res) ->
+exports.loginGet = (req, res) ->
   res.render 'login.jade'
+
+exports.loginPost = (req, res) ->
 
 exports.logout  = (req, res) ->
   req.logout()
@@ -10,6 +12,9 @@ exports.logout  = (req, res) ->
 
 exports.register = (req, res) ->
   res.render 'register.jade'
+
+exports.registerPost = (req, res) ->
+  
 
 exports.recoverPassword = (req, res) ->
   res.render 'recover_password.jade'
