@@ -49,10 +49,11 @@ module.exports = (grunt) ->
           ]
 
     coffeelint:
+      options:
+        max_line_length: 100
       app: [
         'src/server/**/*.coffee'
         'src/client/coffee/**/*.coffee'
-        '!/**/*.coffee'
       ]
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
