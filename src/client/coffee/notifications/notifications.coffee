@@ -14,9 +14,9 @@ angular.module('test')
             $timeout reduceAlerts, 5000
           else @alerts.length = 0
 
-      $timeout ->
+      $timeout (->
         reduceAlerts() if @alerts? and !!@alerts.length
-        , 10000
+      ), 10000
 
       @hasNotifications = => !!(@alerts?.length)
 
