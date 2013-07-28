@@ -1,39 +1,44 @@
-routes = {}
+title = 'Quizerfoo'
 
 class Notification
   constructor: (@type, @message) ->
 
+notifications =
+  badEmailOrPassword: new Notification('alert-danger', 'Bad Email or Password used on Login Form.')
+  accountCreationFailed: new Notification('alert-danger', 'Account creation failed on Registration Form.')
+
+
 module.exports = (app) ->
+  routes = {}
+
   routes.index = (req, res) ->
-    res.render 'index.jade', title: 'Quizerfoo'
+    res.render 'index.jade', title: title
 
   routes.loginGet = (req, res) ->
-    res.render 'login.jade', title: 'Quizerfoo'
+    res.render 'login.jade', title: title
 
   routes.loginPost = (req, res) ->
-    app.UserModel.findOne
-      email: req.body.email
-      (err, user) ->
-        console.log req.body.password, 'password here'
-        if user? and user.authenticate(req.body.password)
-          console.log 'good'
-          req.session.userId = user.id
+    email = req.body['login-email']
+    password = req.body['login-password']
+    remember = req.body['remember']
 
-          if req.body.remember
-            loginToken = new app.LoginTokenModel(email: user.email)
-            loginToken.save ->
-              res.cookie 'loginToken', loginToken.cookieValue,
-                expires: new Date(Date.now() + (2 * 604800000))
-                path: '/'
-          res.redirect '/'
-        else
-          console.log 'bad'
-          res.render 'login.jade',
-            title: 'Quizerfoo'
-            bootstrap:
-              notifications: [
-                new Notification('alert-danger', 'Bad Email or Password used on Login Form.')
-              ]
+    app.UserModel.findOne email: email, (err, user) ->
+      console.log user, 'user ?'
+      if user? and user.authenticate(password)
+        req.session.userId = user.id
+        if remember
+          loginToken = new app.LoginTokenModel(email: user.email)
+          loginToken.save ->
+            res.cookie 'loginToken', loginToken.cookieValue,
+              expires: new Date(Date.now() + (2 * 604800000))
+              path: '/'
+        res.redirect '/'
+      else
+        console.log 'bad'
+        res.render 'login.jade',
+          title: title,
+          bootstrap:
+            notifications: [notifications.badEmailOrPassword]
 
   routes.logout = (req, res) ->
     req.logout()
@@ -41,18 +46,16 @@ module.exports = (app) ->
 
   routes.register = (req, res) ->
     user = new app.UserModel(
-      email: req.body.email
-      password: req.body.password
+      email: req.body['registration-email']
+      password: req.body['registration-password']
     )
     user.save (err) ->
       if err
         console.log 'errrrr hereererererere'
         res.render 'login.jade',
           bootstrap:
-            title: 'Quizerfoo'
-            notifications: [
-              new Notification('alert-danger', 'Account creation failed on Registration Form.')
-            ]
+            title: title
+            notifications: [notifications.accountCreationFailed]
       req.session.userId = user.id
       res.redirect '/'
 

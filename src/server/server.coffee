@@ -71,12 +71,12 @@ app.use app.router
 app.use express.static(__dirname + '/public')
 
 app.configure 'development', ->
-  app.set 'db-uri', 'mongodb://localhost/db-development'
+  app.set 'db-uri', 'mongodb://localhost/db-dev'
   app.use express.errorHandler(dumpExceptions: true)
   app.set 'view options', pretty: true
 
 app.configure 'production', ->
-  app.set 'db-uri', 'mongodb://localhost/db-production'
+  app.set 'db-uri', 'mongodb://localhost/db-prod'
 
 
 models.init ->

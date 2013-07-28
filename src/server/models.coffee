@@ -3,29 +3,29 @@ mongoose = require 'mongoose'
 Schema = mongoose.Schema
 
 validatePresenseOf = (value) ->
-  value and value.length
+  value? and !!value.length
 
-UserModel = new Schema(
+UserModel = new Schema
   email:
     type: String
     validate: [validatePresenseOf, 'an email is required']
     index:
       unique: true
-  hashed_password: String
+  hashedPassword: String
   salt: String
-)
 
-UserModel.virtual('id').get -> @_id.toHexString()
+UserModel.virtual('id')
+  .get -> @_id.toHexString()
 
 UserModel.virtual('password')
   .set (password) ->
     @_password = password
     @salt = @makeSalt()
-    @hashed_password = @encryptPassword(password)
+    @hashedPassword = @encryptPassword(password)
   .get -> @_password
 
 UserModel.method 'authenticate', (plainText) ->
-  @encryptPassword plainText is @hashed_password
+  @encryptPassword(plainText) is @hashedPassword
 
 # simple salt, since we dont need anything robust right now for the demo
 UserModel.method 'makeSalt', ->
@@ -44,7 +44,7 @@ UserModel.pre 'save', (next) ->
     next new Error('Invalid password')
 
 
-LoginTokenModel = new Schema(
+LoginTokenModel = new Schema
   email:
     type: String
     index: true
@@ -54,7 +54,6 @@ LoginTokenModel = new Schema(
   token:
     type: String
     index: true
-)
 
 LoginTokenModel.method 'randomToken', ->
   '' + Math.round(new Date().valueOf() * Math.random())
