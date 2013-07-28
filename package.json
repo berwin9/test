@@ -11,7 +11,7 @@
     "consolidate": "0.9.1",
     "mongoose": "3.6.15",
     "connect-mongodb": "1.1.1",
-    "connect-timeout": "0.0.1"
+    "nodemon": "~0.7.8"
   },
   "devDependencies": {
     "grunt": "0.4.x",
