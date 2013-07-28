@@ -1,10 +1,11 @@
 module.exports = (app) ->
   helpers = {}
 
-  helpers.authenticateFromLoginToken = authenticateFromLoginToken = (req, res, next) ->
+  authenticateFromLoginToken = helpers.authenticateFromLoginToken = (req, res, next) ->
     cookie = JSON.parse req.cookies.loginToken
     console.log cookie, 'cookieeeee'
-    app.LoginToken.findOne(
+    console.log app.UserModel, 'helpers1'
+    app.LoginTokenModel.findOne(
         email: cookie.email
         series: cookie.series
         token: cookie.token,
@@ -13,6 +14,7 @@ module.exports = (app) ->
           res.redirect '/login'
           return
 
+        console.log app.UserModel, 'helpers'
         app.UserModel.findOne email: loginToken.email, (err, user) ->
           if user?
             req.session.userId = user.id
@@ -28,7 +30,7 @@ module.exports = (app) ->
             res.redirect '/login'
     )
 
-  helpers.checkUser = checkUser = (req, res, next) ->
+  checkUser = helpers.checkUser = (req, res, next) ->
     if req.session.userId?
       console.log 'aaaa'
       app.UserModel.findById req.session.userId, (err, user) ->

@@ -10,7 +10,8 @@
     "pg": "2.2.0",
     "consolidate": "0.9.1",
     "mongoose": "3.6.15",
-    "connect-mongodb": "1.1.1"
+    "connect-mongodb": "1.1.1",
+    "connect-timeout": "0.0.1"
   },
   "devDependencies": {
     "grunt": "0.4.x",

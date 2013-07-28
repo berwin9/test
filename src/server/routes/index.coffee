@@ -1,11 +1,47 @@
-title = 'Quizerfoo'
-
 class Notification
   constructor: (@type, @message) ->
 
 notifications =
-  badEmailOrPassword: new Notification('alert-danger', 'Bad Email or Password used on Login Form.')
-  accountCreationFailed: new Notification('alert-danger', 'Account creation failed on Registration Form.')
+  noUserFound: new Notification(
+    'alert-info',
+    'The email you entered does not belong to any account. Please register to log in.'
+  )
+  badEmailOrPassword: new Notification(
+    'alert-danger',
+    'Bad Email or Password used on Log In Form.'
+  )
+  accountCreationFailed: new Notification(
+    'alert-danger',
+    'Account creation failed on Registration Form.'
+  )
+
+authenticate = (req, res, user) ->
+  remember = req.body['login-remember']?
+  req.session.userId = user.id
+  if remember
+    loginToken = new app.LoginTokenModel(email: user.email)
+    loginToken.save ->
+      console.log 'saverific'
+      res.cookie 'loginToken', loginToken.cookieValue,
+        expires: new Date(Date.now() + (2 * 604800000))
+        path: '/'
+  res.redirect '/'
+
+badEmailOrPassword = (req, res) ->
+  res.render 'login.jade',
+    bootstrap:
+      notifications: [notifications.badEmailOrPassword]
+
+noUserFound = (req, res) ->
+  res.render 'login.jade',
+    bootstrap:
+      notifications: [notifications.noUserFound]
+
+accountCreationFailed = (req, res) ->
+  res.render 'login.jade',
+    bootstrap:
+      notifications: [notifications.accountCreationFailed]
+
 
 module.exports = (app) ->
   routes = {}
@@ -19,24 +55,13 @@ module.exports = (app) ->
   routes.loginPost = (req, res) ->
     email = req.body['login-email']
     password = req.body['login-password']
-    remember = req.body['login-remember']
-    console.log 'remember me?', remember
 
     app.UserModel.findOne email: email, (err, user) ->
-      if user? and user.authenticate(password)
-        req.session.userId = user.id
-        if remember
-          loginToken = new app.LoginTokenModel(email: user.email)
-          loginToken.save ->
-            res.cookie 'loginToken', loginToken.cookieValue,
-              expires: new Date(Date.now() + (2 * 604800000))
-              path: '/'
-        res.redirect '/'
-      else
-        res.render 'login.jade',
-          title: title
-          bootstrap:
-            notifications: [notifications.badEmailOrPassword]
+      if user?
+        if user.authenticate(password)
+            authenticate(req, res, user)
+        else badEmailOrPassword(req, res)
+      else noUserFound(req, res)
 
   routes.logout = (req, res) ->
     req.logout()
@@ -48,15 +73,7 @@ module.exports = (app) ->
       password: req.body['registration-password']
     )
     user.save (err) ->
-      if err
-        res.render 'login.jade',
-          bootstrap:
-            title: title
-            notifications: [notifications.accountCreationFailed]
-      req.session.userId = user.id
-      res.redirect '/'
-
-  routes.recoverPassword = (req, res) ->
-    res.render 'recover_password.jade'
+      throw err if err?
+      authenticate(req, res, user)
 
   routes
