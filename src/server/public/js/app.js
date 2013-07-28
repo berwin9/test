@@ -1,10 +1,14 @@
-//@ sourceMappingURL=app.map
 (function() {
   var app;
 
   app = angular.module('test', []);
 
   app.controller('AppCtrl', function() {});
+
+}).call(this);
+
+(function() {
+  var app;
 
   app = angular.module('test');
 
@@ -16,7 +20,7 @@
         if (_this.alerts != null) {
           return _this.alerts.length = 0;
         }
-      }), 5000);
+      }), 10000);
       this.hasNotifications = function() {
         var _ref;
         return !!((_ref = _this.alerts) != null ? _ref.length : void 0);
@@ -26,6 +30,11 @@
       };
     }
   ]);
+
+}).call(this);
+
+(function() {
+  var app;
 
   app = angular.module('test');
 
