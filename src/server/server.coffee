@@ -18,7 +18,7 @@ app.configure 'development', ->
   app.set 'view options', pretty: true
 
 app.configure 'production', ->
-  app.set 'db-uri', 'mongodb://localhost/db-prod'
+  app.set 'db-uri', provess.env.MONGOHQ_URL
 
 
 # keep in mind the order of registration matters for the middleware.
