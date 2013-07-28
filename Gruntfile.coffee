@@ -74,3 +74,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'cs', ['copy:coffee', 'coffee', 'concat:js']
   grunt.registerTask 'production', ['default', 'clean:sourceMaps']
   grunt.registerTask 'default', ['cs', 'less:prod']
+  grunt.registerTask 'heroku', ['default']
