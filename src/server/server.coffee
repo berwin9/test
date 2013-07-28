@@ -1,29 +1,54 @@
 express = require 'express'
-routes = require './routes'
 engines = require 'consolidate'
 mongoose = require 'mongoose'
 mongoStore = require 'connect-mongodb'
 
-models = require './models'
 
 app = express()
 app.use express.logger()
+models = require './models'
+routes = require('./routes')(app)
 
-UserModel = null
-LoginTokenModel = null
-db = null
+authenticateFromLoginToken = (req, res, next) ->
+  cookie = JSON.parse req.cookies.loginToken
+  app.LoginToken.findOne
+      email: cookie.email
+      series: cookie.series
+      token: cookie.token
+    (err, loginToken) ->
+      if not loginToken?
+        res.redirect '/login'
+        return
+
+      app.UserModel.findOne email: loginToken.email, (err, user) ->
+        if user?
+          req.session.userId = user.id
+          req.currentUser = user
+          loginToken.token = loginToken.randomToken()
+          loginToken.save ->
+            res.cookie 'loginToken', loginToken.cookieValue,
+              expires: new Date(Date.now() + (2 * 604800000))
+              path: '/'
+            next()
+        else
+          res.redirect '/login'
 
 checkUser = (req, res, next) ->
-  if req.session.user_id
-    UserModel.findById req.session.user_id, (err, user) ->
-      if user
+  if req.session.userId?
+    console.log 'aaaa'
+    app.UserModel.findById req.session.userId, (err, user) ->
+      if user?
+        console.log 'bbbbb'
         req.currentUser = user
         next()
       else
+        console.log 'cccc'
         res.redirect '/login'
-  else if req.cookies.logintoken
+  else if req.cookies.loginToken
+    console.log 'dddd'
     authenticateFromLoginToken req, res, next
   else
+    console.log 'eeee'
     res.redirect '/login'
 
 # configure the application, the order of registration matters
@@ -55,16 +80,16 @@ app.configure 'production', ->
 
 
 models.init ->
-  UserModel = mongoose.model 'UserModel'
-  LoginTokenModel = mongoose.model 'LoginTokenModel'
-  db = mongoose.connect app.set('db-uri')
+  app.UserModel = mongoose.model 'UserModel'
+  app.LoginTokenModel = mongoose.model 'LoginTokenModel'
+  app.db = mongoose.connect app.set('db-uri')
 
 app.get '/', checkUser, routes.index
-app.get '/register', routes.register
 app.get '/recover-password', routes.recoverPassword
 app.get '/login', routes.loginGet
 app.get '/logout', routes.logout
 app.post '/login', routes.loginPost
+app.post '/register', routes.register
 
 port = process.env.PORT || 5000
 app.listen port, -> console.log 'Listening on ' + port

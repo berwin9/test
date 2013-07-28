@@ -38,7 +38,7 @@ UserModel.method 'isPasswordPresent', ->
   validatePresenseOf @password
 
 UserModel.pre 'save', (next) ->
-  if not @isPasswordPresent()
+  if @isPasswordPresent()
     next()
   else
     next new Error('Invalid password')
@@ -74,7 +74,7 @@ LoginTokenModel.virtual('cookieValue')
       token: @token
       series: @series
 
-#QuestionModel
+#QuestionModel:
 
 exports.init = (cb) ->
   mongoose.model 'UserModel', UserModel
