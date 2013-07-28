@@ -68,7 +68,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
   grunt.loadNpmTasks 'grunt-contrib-less'
-  grunt.loadNpmTasks 'grunt-exec'
   grunt.loadNpmTasks 'grunt-coffeelint'
 
   grunt.registerTask 'cs', ['copy:coffee', 'coffee', 'concat:js']
