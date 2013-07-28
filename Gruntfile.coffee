@@ -30,9 +30,9 @@ module.exports = (grunt) ->
         files:
           'src/server/public/js/app.min.js': ['src/server/public/js/client.js']
 
-    exec:
-      copyCoffee:
-        command: 'mkdir -p public/coffee; cp -R src/client/coffee/ public/coffee/'
+    #exec:
+      #copyCoffee:
+        #command: 'mkdir -p public/coffee; cp -R src/client/coffee/ public/coffee/'
 
     clean:
       js: 'src/server/public/js/*'
@@ -66,6 +66,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-exec'
   grunt.loadNpmTasks 'grunt-coffeelint'
 
-  grunt.registerTask 'cs', ['coffeelint:app', 'exec:copyCoffee', 'coffee', 'concat:js', 'less:prod']
+  grunt.registerTask 'cs', ['coffeelint:app', 'coffee', 'concat:js', 'less:prod']
   grunt.registerTask 'production', ['default', 'clean:sourceMaps']
   grunt.registerTask 'default', ['cs']
