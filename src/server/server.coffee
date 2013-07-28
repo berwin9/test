@@ -49,9 +49,9 @@ app.use express.logger()
 
 port = process.env.PORT || 5000
 
+app.engine 'jade', require('jade').__express
 app.engine 'haml', engines.haml
 app.set 'views', __dirname + '/views'
-app.set 'view engine', 'haml'
 app.use express.logger()
 app.use express.cookieParser()
 app.use express.bodyParser()
@@ -63,15 +63,19 @@ app.use passport.session()
 app.use app.router
 app.use express.static(__dirname + '/public')
 
+
 app.get '/', routes.index
-app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }, (req, res) ->
-  res.redirect '/'
-))
+app.get '/register', routes.register
+app.get '/recover-password', routes.recoverPassword
+app.get '/login', routes.login
+app.get '/logut', routes.logout
+app.post(
+  '/login',
+  passport.authenticate(
+    'local',
+    { successRedirect: '/', failureRedirect: '/login', failureFlash: true },
+    (req, res) -> res.redirect '/'
+  )
+)
 
-app.get '/logut', (req, res) ->
-  req.logout()
-  res.redirect '/'
-
-
-app.listen port, ->
-  console.log 'Listening on ' + port
+app.listen port, -> console.log 'Listening on ' + port
