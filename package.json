@@ -15,18 +15,16 @@
   },
   "devDependencies": {
     "grunt": "0.4.x",
-    "grunt-contrib-watch": "~0.5.1",
-    "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-contrib-coffee": "~0.6.4",
+    "grunt-contrib-concat": "~0.1.3",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-jasmine": "~0.5.1",
     "grunt-contrib-less": "~0.6.4",
     "grunt-exec": "~0.4.0",
     "grunt-jasmine": "~0.1.0",
-    "grunt-coffeelint": "0.0.7",
-    "jasmine-node": "1.10.2"
+    "grunt-coffeelint": "0.0.7"
   },
   "scripts": {
     "postinstall": "ls -al; ./node_modules/grunt/bin/grunt heroku; cd ./node_modules/grunt/bin; ls -al"
