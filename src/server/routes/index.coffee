@@ -21,7 +21,7 @@ authenticate = (req, res, user) ->
   if remember
     loginToken = new app.LoginTokenModel(email: user.email)
     loginToken.save ->
-      console.log 'saverific'
+      # 2 week expiration for the loginToken
       res.cookie 'loginToken', loginToken.cookieValue,
         expires: new Date(Date.now() + (2 * 604800000))
         path: '/'
@@ -65,7 +65,7 @@ module.exports = (app) ->
 
   routes.logout = (req, res) ->
     req.logout()
-    res.redirect '/'
+    res.redirect '/login'
 
   routes.register = (req, res) ->
     user = new app.UserModel(
