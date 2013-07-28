@@ -64,7 +64,11 @@ module.exports = (app) ->
       else noUserFound(req, res)
 
   routes.logout = (req, res) ->
-    req.logout()
+    console.log req
+    if req.session?
+      app.LoginTokenModel.remove email: req.currentUser.email, ->
+      res.clearCookie 'loginToken'
+      req.session.destroy ->
     res.redirect '/login'
 
   routes.register = (req, res) ->

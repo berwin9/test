@@ -50,18 +50,13 @@ models.init mongoose, ->
   app.db = mongoose.connect app.set('db-uri')
 
 
-app.get '/', helpers.checkUser, routes.index
+app.get '/', helpers.loadUser, routes.index
 app.get '/login', routes.loginGet
-app.get '/logout', routes.logout
+app.get '/logout', helpers.loadUser, routes.logout
 app.post '/login', routes.loginPost
 app.post '/register', routes.register
-
-
-app.get '/404', (req, res) ->
-  throw new Error('An expected error')
-
-app.get '/500', (req, res) ->
-  throw new Error('An expected error')
+app.get '/404', routes.handler404
+app.get '/500', routes.handler500
 
 
 port = process.env.PORT || 5000

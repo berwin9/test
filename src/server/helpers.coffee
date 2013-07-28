@@ -26,7 +26,7 @@ module.exports = (app) ->
             res.redirect '/login'
     )
 
-  checkUser = helpers.checkUser = (req, res, next) ->
+  loadUser = helpers.loadUser = (req, res, next) ->
     if req.session.userId?
       app.UserModel.findById req.session.userId, (err, user) ->
         if user?
