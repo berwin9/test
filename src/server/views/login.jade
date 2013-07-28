@@ -1,0 +1,47 @@
+extends layout
+
+block content
+  .row
+    .span6
+      form#login-form(method="POST", action="/login")
+        legend Login Form
+
+        .control-group
+          label(for="login-email") E-mail
+          input(
+            type="text", value="", placeholder="Enter your email",
+            id="login-email", name="login-email"
+          )
+
+        .control-group
+          label(for="login-password") Password
+          input(
+            type="password", value="", placeholder="Enter your password",
+            id="login-password", name="login-password"
+          )
+
+        .control-group
+          .controls
+            label(for="login-remember") remember me? 
+              input(type="checkbox", id="login-remember", name="login-remember")
+          input.btn.btn-primary(type="submit", value="Login")
+
+    .span6
+      form#register-form.pull-right(method="POST", action="/register")
+        legend Registration Form
+
+        .control-group
+          label(for="registration-email") E-mail
+          input(
+            type="text", value="", placeholder="Enter your email",
+            id="registration-email", name="registration-email"
+          )
+
+        .control-group
+          label(for="registration-password") Password
+          input(
+            type="password", value="", placeholder="Enter your password",
+            id="registration-password", name="registration-password"
+          )
+
+        input.btn.btn-primary(type="submit", value="Register")

@@ -1,7 +1,48 @@
-doctype 5
-html
+!!! 5
+//if lt IE 7
+    <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en">
+//if IE 7
+    <html class="no-js lt-ie9 lt-ie8" lang="en">
+//if IE 8
+    <html class="no-js lt-ie9" lang="en">
+<!--[if gt IE 8]><!-->
+html(class="no-js", lang="en")
+  <!--<![endif]-->
   head
+    meta(charset="utf-8")
+    meta("http-equiv"="X-UA-Compatible", content="IE-edge,chrome-1")
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    meta(name="description", content="")
+    meta(name="viewport", content="width=device-width")
+    link(rel="stylesheet", href="/styles/app.css")
+    script.
+      var __bootstrapData = !{JSON.stringify(bootstrap || null)};
+
+  body(data-ng-app="test", data-ng-controller="AppCtrl as app")
+    .navbar.navbar-fixed-top.navbar-inverse
+      .navbar-inner
+        .container
+          .nav-collapse.collapse
+            ul.nav
+              li
+                a(href="#") Quizerfoo
+          ul.nav.nav-pills.pull-right
+            li
+              a(href='/logout') Logout
+
+    #notifications-container(
+      data-ng-controller="NotificationCtrl as notification",
+      data-ng-show="notification.hasNotifications()"
+    )
+      div.alert(
+        data-ng-repeat="item in notification.alerts",
+        data-ng-class="item.type",
+        data-ng-animate="'animate'"
+      )
+        button.close(type="button", data-ng-click="notification.close($index)") x
+        strong(data-ng-bind="item.message")
+
+    .container
+      block content
+    script(src="/js/libs.js")
+    script(src="/js/app.js")
