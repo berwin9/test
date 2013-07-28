@@ -8,48 +8,7 @@ app = express()
 app.use express.logger()
 models = require './models'
 routes = require('./routes')(app)
-
-authenticateFromLoginToken = (req, res, next) ->
-  cookie = JSON.parse req.cookies.loginToken
-  app.LoginToken.findOne
-      email: cookie.email
-      series: cookie.series
-      token: cookie.token
-    (err, loginToken) ->
-      if not loginToken?
-        res.redirect '/login'
-        return
-
-      app.UserModel.findOne email: loginToken.email, (err, user) ->
-        if user?
-          req.session.userId = user.id
-          req.currentUser = user
-          loginToken.token = loginToken.randomToken()
-          loginToken.save ->
-            res.cookie 'loginToken', loginToken.cookieValue,
-              expires: new Date(Date.now() + (2 * 604800000))
-              path: '/'
-            next()
-        else
-          res.redirect '/login'
-
-checkUser = (req, res, next) ->
-  if req.session.userId?
-    console.log 'aaaa'
-    app.UserModel.findById req.session.userId, (err, user) ->
-      if user?
-        console.log 'bbbbb'
-        req.currentUser = user
-        next()
-      else
-        console.log 'cccc'
-        res.redirect '/login'
-  else if req.cookies.loginToken
-    console.log 'dddd'
-    authenticateFromLoginToken req, res, next
-  else
-    console.log 'eeee'
-    res.redirect '/login'
+helpers = require('./helpers')(app)
 
 # configure the application, the order of registration matters
 # for the middleware
@@ -59,7 +18,6 @@ app.set 'views', __dirname + '/views'
 app.use express.logger()
 app.use express.cookieParser()
 app.use express.bodyParser()
-app.use express.session(secret: 'secret password')
 app.use express.session(
   cookie:
     maxAge: 60000 * 30
@@ -84,7 +42,7 @@ models.init ->
   app.LoginTokenModel = mongoose.model 'LoginTokenModel'
   app.db = mongoose.connect app.set('db-uri')
 
-app.get '/', checkUser, routes.index
+app.get '/', helpers.checkUser, routes.index
 app.get '/recover-password', routes.recoverPassword
 app.get '/login', routes.loginGet
 app.get '/logout', routes.logout

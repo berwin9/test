@@ -7,7 +7,6 @@ notifications =
   badEmailOrPassword: new Notification('alert-danger', 'Bad Email or Password used on Login Form.')
   accountCreationFailed: new Notification('alert-danger', 'Account creation failed on Registration Form.')
 
-
 module.exports = (app) ->
   routes = {}
 
@@ -20,10 +19,10 @@ module.exports = (app) ->
   routes.loginPost = (req, res) ->
     email = req.body['login-email']
     password = req.body['login-password']
-    remember = req.body['remember']
+    remember = req.body['login-remember']
+    console.log 'remember me?', remember
 
     app.UserModel.findOne email: email, (err, user) ->
-      console.log user, 'user ?'
       if user? and user.authenticate(password)
         req.session.userId = user.id
         if remember
@@ -34,9 +33,8 @@ module.exports = (app) ->
               path: '/'
         res.redirect '/'
       else
-        console.log 'bad'
         res.render 'login.jade',
-          title: title,
+          title: title
           bootstrap:
             notifications: [notifications.badEmailOrPassword]
 
@@ -51,7 +49,6 @@ module.exports = (app) ->
     )
     user.save (err) ->
       if err
-        console.log 'errrrr hereererererere'
         res.render 'login.jade',
           bootstrap:
             title: title

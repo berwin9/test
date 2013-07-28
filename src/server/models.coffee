@@ -2,8 +2,10 @@ crypto = require 'crypto'
 mongoose = require 'mongoose'
 Schema = mongoose.Schema
 
+
 validatePresenseOf = (value) ->
   value? and !!value.length
+
 
 UserModel = new Schema
   email:
@@ -74,6 +76,7 @@ LoginTokenModel.virtual('cookieValue')
       series: @series
 
 #QuestionModel:
+
 
 exports.init = (cb) ->
   mongoose.model 'UserModel', UserModel
