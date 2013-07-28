@@ -38,14 +38,33 @@ module.exports = (grunt) ->
       js: 'src/server/public/js/*'
       sourceMaps: ['src/server/public/coffee', 'src/server/public/js/app.map']
 
+    less:
+      prod:
+        options:
+          yuicompress: true
+        files:
+          'src/server/public/styles/app.css': [
+            'src/client/styles/bootstrap/bootstrap.less'
+            'src/client/styles/flatui/flat-ui.less'
+          ]
+
+    coffeelint:
+      app: [
+        'src/server/**/*.coffee'
+        'src/client/coffee/**/*.coffee'
+        '!/**/*.coffee'
+      ]
+
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
+  grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-exec'
+  grunt.loadNpmTasks 'grunt-coffeelint'
 
-  grunt.registerTask 'cs', ['exec:copyCoffee', 'coffee', 'concat:js']
+  grunt.registerTask 'cs', ['coffeelint:app', 'exec:copyCoffee', 'coffee', 'concat:js', 'less:prod']
   grunt.registerTask 'production', ['default', 'clean:sourceMaps']
   grunt.registerTask 'default', ['cs']
