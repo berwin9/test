@@ -23,6 +23,7 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-less": "~0.6.4",
     "grunt-jasmine": "~0.1.0",
+    "coffee-script": "1.4.x",
     "grunt-coffeelint": "0.0.7"
   },
   "scripts": {
