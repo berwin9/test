@@ -50,7 +50,7 @@ module.exports = (grunt) ->
 
     coffeelint:
       options:
-        max_line_length: 100
+        max_line_length: 120
       app: [
         'src/server/**/*.coffee'
         'src/client/coffee/**/*.coffee'

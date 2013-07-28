@@ -1,5 +1,5 @@
-app = angular.module 'test'
+angular.module('test')
 
-app.factory 'BootstrapService', ->
-  get: ->
-    window.__bootstrapData.notifications if window.__bootstrapData?
+  .factory 'BootstrapService', ->
+    get: ->
+      window.__bootstrapData.notifications if window.__bootstrapData?

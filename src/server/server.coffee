@@ -11,6 +11,7 @@ routes = require('./routes')(app)
 helpers = require('./helpers')(app)
 app.locals.title = 'Quizerfoo'
 
+
 app.configure 'development', ->
   app.set 'db-uri', 'mongodb://localhost/db-dev'
   app.use express.errorHandler(dumpExceptions: true)
@@ -40,6 +41,9 @@ app.use app.router
 app.use express.static(__dirname + '/public')
 
 
+# we need to pass in mongoose since the models actually
+# need to register themselves to mongoose then we can assign and use
+# them in `app`
 models.init mongoose, ->
   app.UserModel = mongoose.model 'UserModel'
   app.LoginTokenModel = mongoose.model 'LoginTokenModel'
@@ -51,6 +55,13 @@ app.get '/login', routes.loginGet
 app.get '/logout', routes.logout
 app.post '/login', routes.loginPost
 app.post '/register', routes.register
+
+
+app.get '/404', (req, res) ->
+  throw new Error('An expected error')
+
+app.get '/500', (req, res) ->
+  throw new Error('An expected error')
 
 
 port = process.env.PORT || 5000
