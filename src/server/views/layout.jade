@@ -17,7 +17,7 @@ html(class='no-js', lang='en')
     link(rel='stylesheet', href='/styles/app.css')
     script.
       var __bootstrapData = !{JSON.stringify(bootstrap || null)};
-  body
+  body(data-ng-app='test', data-ng-controller='AppCtrl as app')
     .navbar.navbar-fixed-top.navbar-inverse
       .navbar-inner
         .container
@@ -25,8 +25,13 @@ html(class='no-js', lang='en')
             ul.nav
               li
                 a(href="#") Quizerfoo
-    #notifications-container(data-ng-controller='NotificationsCtrl as notification')
-      div.alert(data-ng-repeat='item in notifications.alerts', data-ng-class='item.type')
+    #notifications-container(
+      data-ng-controller='NotificationCtrl as notification',
+      data-ng-show='notification.hasNotifications()'
+    )
+      div.alert(data-ng-repeat='item in notification.alerts', data-ng-class='item.type')
+        button.close(type='button', data-ng-click='notification.close($index)') x
+        strong(data-ng-bind='item.message')
     .container
       block content
     script(src='/js/libs.js')

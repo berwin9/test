@@ -1,1 +1,3 @@
-app = angular.module 'demo', []
+app = angular.module 'test', []
+
+app.controller 'AppCtrl', ->

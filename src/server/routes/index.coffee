@@ -1,7 +1,7 @@
 routes = {}
 
 class Notification
-  constructor(@type, @message)
+  constructor: (@type, @message) ->
 
 module.exports = (app) ->
   routes.index = (req, res) ->
@@ -31,7 +31,7 @@ module.exports = (app) ->
           res.render 'login.jade',
             bootstrap:
               notifications: [
-                new Notification(type: 'danger', message: 'Bad Email or Password.')
+                new Notification('alert-danger', 'Bad Email or Password.')
               ]
 
   routes.logout = (req, res) ->
@@ -49,7 +49,7 @@ module.exports = (app) ->
         res.render 'login.jade',
           bootstrap:
             notifications: [
-              new Notification(type: 'danger', message: 'Account creation failed.')
+              new Notification('alert-danger', 'Account creation failed.')
             ]
       req.session.userId = user.id
       res.redirect '/'
