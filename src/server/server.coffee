@@ -35,8 +35,10 @@ passport.use new LocalStrategy(
     process.nextTick ->
       findByUsername username, (err, usr) ->
         if err? then return done err
-        if not user? then return done null, false, message: 'Unknown user #{username}'
-        if user.password is not password then return done null, false, message: 'Invalid password'
+        if not user?
+          return done null, false, message: 'Unknown user #{username}'
+        if user.password is not password
+          return done null, false, message: 'Invalid password'
         return done null, user
 )
 
