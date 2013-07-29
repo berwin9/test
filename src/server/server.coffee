@@ -53,11 +53,12 @@ class App
     @questionsModule.init()
 
   initRoutes: (app, routes, helpers) ->
-    app.get '/', helpers.loadUser, routes.index
+    app.get '/', helpers.tryLoadUser, routes.index
     app.get '/login', routes.loginGet
-    app.get '/logout', helpers.loadUser, routes.logout
+    app.get '/logout', helpers.tryLoadUser, routes.logout
     app.post '/login', routes.loginPost
     app.post '/register', routes.register
+    app.get '/questions', helpers.tryLoadUser, routes.getQuestions
     app.get '/500', helpers.throwError
     app.get '/:others', helpers.throwError
 

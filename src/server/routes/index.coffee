@@ -85,4 +85,8 @@ module.exports = (app) ->
       if err? then return accountCreationFailed req, res
       authenticate(req, res, user)
 
+  routes.getQuestions = (req, res) ->
+    app.QuizItemModel.find().exec (err, data) ->
+      res.json(data)
+
   routes

@@ -80,8 +80,9 @@ exports.init = (mongoose, cb) ->
 
 
   QuizItemAnswerModel = new Schema
-    anwser:
+    answer:
       type: String
+      required: true
       validate: [validatePresenseOf, 'an answer is required']
       index:
         unique: true
@@ -102,6 +103,7 @@ exports.init = (mongoose, cb) ->
       type: Number
       index:
         unique: true
+      required: true
     question:
       type: String
       validate: [validatePresenseOf, 'a question is required']
