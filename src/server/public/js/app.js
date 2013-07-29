@@ -157,7 +157,6 @@
   initQuizDecorator = function(ctrl) {
     return function(cb) {
       return function() {
-        console.log('init quiz');
         if (ctrl.curActiveQuizIndex == null) {
           ctrl.setSlideTemplate(ctrl.pageTemplates.question);
           ctrl.setActiveModelByIndex(0);
@@ -181,8 +180,8 @@
       this.curQuizItem = null;
       this.setActiveModelByIndex = function(index) {
         if (_this.quizItems != null) {
-          _this.curQuizItem = _this.quizItems[index];
-          return _this.curActiveQuizIndex = index;
+          _this.curActiveQuizIndex = index;
+          return _this.curQuizItem = _this.quizItems[index];
         }
       };
       this.onSlideIndexClick = initQuizDecorator(this)(function(index) {
@@ -190,7 +189,7 @@
       });
       this.onNextIndexClick = function() {
         if (_this.curActiveQuizIndex == null) {
-          _this.setSlideTemplate(_this.pageTemplates.questions);
+          _this.setSlideTemplate(_this.pageTemplates.question);
           return _this.setActiveModelByIndex(0);
         } else if (_this.curActiveQuizIndex !== _this.quizItems.length - 1) {
           return _this.setActiveModelByIndex(_this.curActiveQuizIndex + 1);

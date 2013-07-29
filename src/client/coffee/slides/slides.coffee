@@ -3,7 +3,6 @@
 initQuizDecorator = (ctrl) ->
   (cb) ->
     ->
-      console.log 'init quiz'
       unless ctrl.curActiveQuizIndex?
         ctrl.setSlideTemplate ctrl.pageTemplates.question
         ctrl.setActiveModelByIndex 0
@@ -26,8 +25,8 @@ angular.module('test')
 
       @setActiveModelByIndex = (index) =>
         if @quizItems?
-          @curQuizItem = @quizItems[index]
           @curActiveQuizIndex = index
+          @curQuizItem = @quizItems[index]
 
       @onSlideIndexClick = initQuizDecorator(@) \
         (index) =>
@@ -35,7 +34,7 @@ angular.module('test')
 
       @onNextIndexClick = =>
         if not @curActiveQuizIndex?
-          @setSlideTemplate @pageTemplates.questions
+          @setSlideTemplate @pageTemplates.question
           @setActiveModelByIndex 0
         else if @curActiveQuizIndex isnt @quizItems.length - 1
           @setActiveModelByIndex(@curActiveQuizIndex + 1)
