@@ -12,6 +12,7 @@ routes = require('./routes')(app)
 helpers = require('./helpers')(app)
 app.locals.title = 'Quizerfoo'
 
+
 app.configure 'development', ->
   app.set 'db-uri', 'mongodb://localhost/db-dev'
   app.use express.errorHandler(dumpExceptions: true)
@@ -20,10 +21,10 @@ app.configure 'development', ->
 app.configure 'production', ->
   app.set 'db-uri', process.env.MONGOLAB_URI
 
-
 connectionUri = url.parse app.set('db-uri')
 dbName = connectionUri.pathname.replace(/^\//, '')
-mongoStore = mongo.Db.connect app.set('db-uri'), ->
+mongoStore = mongo.Db.connect app.set('db-uri'), (err, db) ->
+
 
 # keep in mind the order of registration matters for the middleware.
 # we also use 2 view engines so we can use haml(besides jade), but we can't use it fully
