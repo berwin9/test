@@ -152,37 +152,57 @@
 }).call(this);
 
 (function() {
+  var initQuizDecorator;
+
+  initQuizDecorator = function(ctrl) {
+    return function(cb) {
+      return function() {
+        console.log('init quiz');
+        if (ctrl.curActiveQuizIndex == null) {
+          ctrl.setSlideTemplate(ctrl.pageTemplates.question);
+          ctrl.setActiveModelByIndex(0);
+        }
+        return cb.apply(null, arguments);
+      };
+    };
+  };
+
   angular.module('test').controller('SlideCtrl', [
     '$scope', 'QuizItemModelsService', function($scope, QuizItemModelsService) {
       var _this = this;
+      this.pageTemplates = {
+        intro: 'intro.html',
+        question: 'question.html',
+        results: 'results.html'
+      };
+      this.curSlideTemplate = this.pageTemplates.intro;
       this.quizItems = null;
       this.curActiveQuizIndex = null;
       this.curQuizItem = null;
       this.setActiveModelByIndex = function(index) {
         if (_this.quizItems != null) {
-          console.log(index);
           _this.curQuizItem = _this.quizItems[index];
           return _this.curActiveQuizIndex = index;
         }
       };
-      this.onSlideIndexClick = function(index) {
+      this.onSlideIndexClick = initQuizDecorator(this)(function(index) {
         return _this.setActiveModelByIndex(index);
-      };
+      });
       this.onNextIndexClick = function() {
-        if (_this.curActiveQuizIndex !== _this.quizItems.length - 1) {
+        if (_this.curActiveQuizIndex == null) {
+          _this.setSlideTemplate(_this.pageTemplates.questions);
+          return _this.setActiveModelByIndex(0);
+        } else if (_this.curActiveQuizIndex !== _this.quizItems.length - 1) {
           return _this.setActiveModelByIndex(_this.curActiveQuizIndex + 1);
         }
       };
-      this.onPrevIndexClick = function() {
-        console.log(_this.curActiveQuizIndex);
+      this.onPrevIndexClick = initQuizDecorator(this)(function() {
         if (_this.curActiveQuizIndex !== 0) {
           return _this.setActiveModelByIndex(_this.curActiveQuizIndex - 1);
         }
-      };
+      });
       QuizItemModelsService.get().then(function(models) {
-        _this.quizItems = models;
-        _this.curActiveQuizIndex = 0;
-        return _this.setActiveModelByIndex(_this.curActiveQuizIndex);
+        return _this.quizItems = models;
       });
       this.getPossibleAnswersByIds = function(ids) {
         if (ids != null) {
@@ -191,6 +211,26 @@
       };
       this.setAnswer = function(id) {
         return _this.curQuizItem.userAnswerId = id;
+      };
+      this.resetQuiz = function() {
+        var quizItem, _i, _len, _ref, _results;
+        _ref = _this.quizItems;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          quizItem = _ref[_i];
+          _results.push(quizItem.resetAnswer());
+        }
+        return _results;
+      };
+      this.initQuiz = function() {
+        _this.curActiveQuizIndex = 0;
+        return _this.setActiveModelByIndex(_this.curActiveQuizIndex);
+      };
+      this.setSlideTemplate = function(template) {
+        return _this.curSlideTemplate = template;
+      };
+      this.isActiveIndex = function(index) {
+        return _this.curActiveQuizIndex === index;
       };
       return this;
     }

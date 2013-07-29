@@ -1,6 +1,10 @@
 extends layout
 
 block content
+
   include ngtemplates/slides
-  include ngtemplates/slide
+  include ngtemplates/question
+  include ngtemplates/intro
+  include ngtemplates/results
+
   .row#slides-container(data-ng-include="'slides.html'")

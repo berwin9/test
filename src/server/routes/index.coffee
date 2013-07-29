@@ -2,7 +2,7 @@ haml = require 'hamljs'
 parse = require('url').parse
 join = require('path').join
 fs = require 'fs'
-templateRoot = __dirname.replace(/routes$/, 'public')
+
 
 class Notification
   constructor: (@type, @message) ->
