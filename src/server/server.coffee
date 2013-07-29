@@ -1,7 +1,8 @@
 express = require 'express'
 engines = require 'consolidate'
 mongoose = require 'mongoose'
-mongoStore = require 'connect-mongodb'
+mongo = require 'mongodb'
+url = require 'url'
 
 
 app = express()
@@ -11,7 +12,6 @@ routes = require('./routes')(app)
 helpers = require('./helpers')(app)
 app.locals.title = 'Quizerfoo'
 
-
 app.configure 'development', ->
   app.set 'db-uri', 'mongodb://localhost/db-dev'
   app.use express.errorHandler(dumpExceptions: true)
@@ -20,6 +20,10 @@ app.configure 'development', ->
 app.configure 'production', ->
   app.set 'db-uri', process.env.MY_MONGO
 
+
+connectionUri = url.parse app.set('db-uri')
+dbName = connectionUri.pathname.replace(/^\//, '')
+mongoStore = mongo.Db.connect app.set('db-uri'), ->
 
 # keep in mind the order of registration matters for the middleware.
 # we also use 2 view engines so we can use haml(besides jade), but we can't use it fully
@@ -33,7 +37,7 @@ app.use express.cookieParser()
 app.use express.session
   cookie:
     maxAge: 60000 * 30
-  store: new mongoStore(url: app.set 'db-uri')
+  store: mongoStore
   secret: 'super top secret pass'
 app.use express.logger()
 app.use express.methodOverride()
