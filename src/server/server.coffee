@@ -13,7 +13,7 @@ class App
     @models = require './models'
     @routes = require('./routes')(app)
     @helpers = require('./helpers')(app)
-    @questions = require('./questions')(app)
+    @questionsModule = require('./questions')(app)
     app.locals.title = 'Quizerfoo'
 
     app.configure 'development', ->
@@ -50,6 +50,7 @@ class App
 
     @initDb app, @models, mongoose
     @initRoutes app, @routes, @helpers
+    @questionsModule.init()
 
   initRoutes: (app, routes, helpers) ->
     app.get '/', helpers.loadUser, routes.index
@@ -67,7 +68,7 @@ class App
     models.init mongoose, ->
       app.UserModel = mongoose.model 'UserModel'
       app.LoginTokenModel = mongoose.model 'LoginTokenModel'
-      app.QuizItemAnswersModel = mongoose.model 'QuizItemAnswersModel'
+      app.QuizItemAnswerModel = mongoose.model 'QuizItemAnswerModel'
       app.QuizItemModel = mongoose.model 'QuizItemModel'
       app.db = mongoose.connect app.set('db-uri')
 

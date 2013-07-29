@@ -14,8 +14,8 @@ exports.init = (mongoose, cb) ->
         unique: true
     hashedPassword: String
     salt: String
-    created_date: Date
-    updated_date: Date
+    createdDate: Date
+    updatedDate: Date
 
   UserModel.virtual('id')
     .get -> @_id.toHexString()
@@ -42,8 +42,8 @@ exports.init = (mongoose, cb) ->
 
   UserModel.pre 'save', (next) ->
     if @isPasswordPresent()
-      @created_date = new Date() if not @created_date
-      @updated_date = new Date()
+      @createdDate = new Date() if not @createdDate
+      @updatedDate = new Date()
       next()
     else
       next new Error('Invalid password')
@@ -79,36 +79,48 @@ exports.init = (mongoose, cb) ->
         series: @series
 
 
-  QuizItemAnswersModel = new Schema
+  QuizItemAnswerModel = new Schema
     anwser:
       type: String
+      validate: [validatePresenseOf, 'an answer is required']
+      index:
+        unique: true
+    createdDate: Date
+    updatedDate: Date
 
-  QuizItemAnswersModel.virtual('id')
+  QuizItemAnswerModel.virtual('id')
     .get -> @_id.toHexString()
 
-  QuizItemAnswersModel.pre 'save', (next) ->
-    if next then next()
+  QuizItemAnswerModel.pre 'save', (next) ->
+    @createdDate = new Date() if not @createdDate
+    @updatedDate = new Date()
+    next()
 
 
   QuizItemModel = new Schema
-    order_number:
+    orderNumber:
       type: Number
-      index: true
-      unique: true
+      index:
+        unique: true
     question:
       type: String
-    correct_answers: [QuizItemAnswersModel]
-    possible_answers: [QuizItemAnswersModel]
+      validate: [validatePresenseOf, 'a question is required']
+    correctAnswers: [QuizItemAnswerModel]
+    possibleAnswers: [QuizItemAnswerModel]
+    createdDate: Date
+    updatedDate: Date
 
 
   QuizItemModel.virtual('id')
     .get -> @_id.toHexString()
 
   QuizItemModel.pre 'save', (next) ->
-    if next then next()
+    @createdDate = new Date() if not @createdDate
+    @updatedDate = new Date()
+    next()
 
   mongoose.model 'UserModel', UserModel
   mongoose.model 'LoginTokenModel', LoginTokenModel
-  mongoose.model 'QuizItemAnswersModel', QuizItemAnswersModel
+  mongoose.model 'QuizItemAnswerModel', QuizItemAnswerModel
   mongoose.model 'QuizItemModel', QuizItemModel
   cb()

@@ -85,21 +85,4 @@ module.exports = (app) ->
       if err? then return accountCreationFailed req, res
       authenticate(req, res, user)
 
-  routes.hamlRouter = (req, res) ->
-    url = parse req.url
-    path = join templateRoot, url.pathname
-    fs.readFile path, (err, data) ->
-      if err?
-        res.redirect '/500'
-      else
-        try
-          html = haml.render data.toString()
-          console.log html
-          res.writeHead 200,
-              'Content-Type': 'text/html',
-              'Content-Length': Buffer.byteLength html
-          res.end html
-        catch
-          res.redirect '/500'
-
   routes
