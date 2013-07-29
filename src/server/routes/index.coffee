@@ -75,7 +75,7 @@ module.exports = (app) ->
       email: req.body['registration-email']
       password: req.body['registration-password']
     user.save (err) ->
-      throw err if err?
+      if err? then return accountCreationFailed req, res
       authenticate(req, res, user)
 
   routes.throwError = (req, res) ->

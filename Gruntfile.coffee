@@ -30,9 +30,14 @@ module.exports = (grunt) ->
         files:
           'src/server/public/js/app.min.js': ['src/server/public/js/client.js']
 
-    #exec:
-      #copyCoffee:
-        #command: 'mkdir -p public/coffee; cp -R src/client/coffee/ public/coffee/'
+    copy:
+      coffee:
+        files: [
+          expand: true
+          cwd: "src/client"
+          src: ["coffee/*.*"]
+          dest: "public"
+        ]
 
     clean:
       js: 'src/server/public/js/*'
@@ -62,10 +67,11 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-less'
-  grunt.loadNpmTasks 'grunt-exec'
   grunt.loadNpmTasks 'grunt-coffeelint'
 
-  grunt.registerTask 'cs', ['coffeelint:app', 'coffee', 'concat:js', 'less:prod']
+  grunt.registerTask 'cs', ['copy:coffee', 'coffee', 'concat:js']
   grunt.registerTask 'production', ['default', 'clean:sourceMaps']
-  grunt.registerTask 'default', ['cs']
+  grunt.registerTask 'default', ['cs', 'less:prod']
+  grunt.registerTask 'heroku', ['default']

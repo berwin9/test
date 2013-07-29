@@ -1,7 +1,8 @@
 express = require 'express'
 engines = require 'consolidate'
 mongoose = require 'mongoose'
-mongoStore = require 'connect-mongodb'
+mongo = require 'mongodb'
+url = require 'url'
 
 
 app = express()
@@ -18,7 +19,11 @@ app.configure 'development', ->
   app.set 'view options', pretty: true
 
 app.configure 'production', ->
-  app.set 'db-uri', 'mongodb://localhost/db-prod'
+  app.set 'db-uri', process.env.MONGOLAB_URI
+
+connectionUri = url.parse app.set('db-uri')
+dbName = connectionUri.pathname.replace(/^\//, '')
+mongoStore = mongo.Db.connect app.set('db-uri'), (err, db) ->
 
 
 # keep in mind the order of registration matters for the middleware.
@@ -33,7 +38,7 @@ app.use express.cookieParser()
 app.use express.session
   cookie:
     maxAge: 60000 * 30
-  store: new mongoStore(url: app.set 'db-uri')
+  store: mongoStore
   secret: 'super top secret pass'
 app.use express.logger()
 app.use express.methodOverride()
