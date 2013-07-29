@@ -7,6 +7,6 @@ angular.module('test')
   .factory 'QuizModelService', ->
     get: ->
       [
-        questions: 'why', correctAnwers: [1], possibleAnswers: ['a', 'b']
-        questions: 'why', correctAnwers: [1], possibleAnswers: ['a', 'b']
+        { questions: 'why', correctAnwers: [1], possibleAnswers: ['a', 'b'] }
+        { questions: 'why', correctAnwers: [1], possibleAnswers: ['a', 'b'] }
       ]

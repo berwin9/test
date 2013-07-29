@@ -21,4 +21,9 @@ angular.module('test')
       @hasNotifications = => !!(@alerts?.length)
 
       @close = (index) => @alerts.splice(index, 1)
+
+      # because of coffeescripts implied return at end, this causes bugs
+      # when using angulars `controller as` syntax so we need to explicitly
+      # return the controller instance
+      @
   ]

@@ -95,9 +95,10 @@
   height: 30px;
 }
 
+@body-padding-offset: 60px;
 body {
-  padding-top: 60px;
-  padding-bottom: 60px;
+  padding-top: @body-padding-offset;
+  padding-bottom: @body-padding-offset;
   background-color: #f5f5f5;
 }
 
@@ -124,4 +125,17 @@ body {
   height: auto;
   margin-bottom: 15px;
   padding: 7px 9px;
+}
+
+#slides-container {
+}
+
+.container-narrow {
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+#slides {
+  /*margin: 20px 0;*/
+  text-align: center;
 }

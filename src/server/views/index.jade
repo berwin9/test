@@ -1,4 +1,5 @@
 extends layout
 
 block content
-  .row#slides-container(data-ng-include="'src/client/templates/slides.haml'")
+  include ngtemplates/slides
+  .row#slides-container(data-ng-include="'slides.html'")

@@ -33,9 +33,10 @@
         var _ref;
         return !!((_ref = _this.alerts) != null ? _ref.length : void 0);
       };
-      return this.close = function(index) {
+      this.close = function(index) {
         return _this.alerts.splice(index, 1);
       };
+      return this;
     }
   ]);
 
@@ -50,6 +51,32 @@
         }
       }
     };
+  }).factory('QuizModelService', function() {
+    return {
+      get: function() {
+        return [
+          {
+            questions: 'why',
+            correctAnwers: [1],
+            possibleAnswers: ['a', 'b']
+          }, {
+            questions: 'why',
+            correctAnwers: [1],
+            possibleAnswers: ['a', 'b']
+          }
+        ];
+      }
+    };
   });
+
+}).call(this);
+
+(function() {
+  angular.module('test').controller('SlideCtrl', [
+    'QuizModelService', function(QuizModelService) {
+      this.quizItems = QuizModelService.get();
+      return this;
+    }
+  ]);
 
 }).call(this);
