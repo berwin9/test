@@ -58,5 +58,11 @@ class QuizItemModel
 
   reset: -> @userAnswerId = null
 
+  isCorrect: ->
+    for correctAnswer in @correctAnswerIds \
+    when correctAnswerIds is @userAnswerId
+      return true
+    return false
+
 class QuizItemAnswerModel
   constructor: (@id, @answer) ->
