@@ -18,7 +18,7 @@ app.configure 'development', ->
   app.set 'view options', pretty: true
 
 app.configure 'production', ->
-  app.set 'db-uri', process.env.MY_MONGO
+  app.set 'db-uri', process.env.MONGOLAB_URI
 
 
 connectionUri = url.parse app.set('db-uri')
