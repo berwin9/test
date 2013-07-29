@@ -1,11 +1,14 @@
 script(type="text/ng-template", id="slides.html")
   #slides.span8("data-ng-controller"="SlideCtrl as slide")
-    .pagination
+    #slides-nav-bar.pagination
       ul
         li.previous
-          a.fui-arrow-left(href="#")
-        li("data-ng-repeat"="quizItem in slide.quizItems", "data-ng-class"="{ active: !$index }")
-          a(href="#", "data-ng-bind"="$index")
+          a.fui-arrow-left(href="#", "data-ng-click"="slide.onPrevIndexClick()")
+        li(
+          "data-ng-repeat"="quizItem in slide.quizItems",
+          "data-ng-class"="{ 'active': $index === slide.curActiveQuizIndex }"
+        )
+          a(href="#", "data-ng-bind"="$index + 1", "data-ng-click"="slide.onSlideIndexClick($index)")
         li.next
-          a.fui-arrow-right(href="#")
-    .well("data-ng-include"="'slide.html'")
+          a.fui-arrow-right(href="#", "data-ng-click"="slide.onNextIndexClick()")
+    .slide("data-ng-include"="'slide.html'")

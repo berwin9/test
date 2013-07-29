@@ -1,8 +1,13 @@
 script(type="text/ng-template", id="slide.html")
-  span('data-ng-bind'="slide.curActiveQuizItemModel.question")
-    
-  ol(type="a")
-    li("data-ng-repeat"="answerModel in slide.getPossibleAnswersByIds(slide.curActiveQuizItemModel.possibleAnswerIds)")
-      span("data-ng-bind"="answerModel.answer")
+  h3("data-ng-bind"="'Question number: ' + (slide.curActiveQuizIndex + 1)")
+  span('data-ng-bind'="slide.curQuizItem.question")
+  .well
+    ol(type="a")
+      li(
+        "data-ng-repeat"="answerModel in slide.getPossibleAnswersByIds(slide.curQuizItem.possibleAnswerIds)",
+        "data-ng-class"="{ 'alert-info well-small': slide.curQuizItem.userAnswerId === answerModel.id }",
+        "data-ng-click"="slide.setAnswer(answerModel.id)"
+      )
+        span("data-ng-bind"="answerModel.answer")
 
 

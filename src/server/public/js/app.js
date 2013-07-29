@@ -157,14 +157,27 @@
       var _this = this;
       this.quizItems = null;
       this.curActiveQuizIndex = null;
-      this.curActiveQuizItemModel = null;
+      this.curQuizItem = null;
       this.setActiveModelByIndex = function(index) {
         if (_this.quizItems != null) {
-          return _this.curActiveQuizItemModel = _this.quizItems[index];
+          console.log(index);
+          _this.curQuizItem = _this.quizItems[index];
+          return _this.curActiveQuizIndex = index;
         }
       };
       this.onSlideIndexClick = function(index) {
         return _this.setActiveModelByIndex(index);
+      };
+      this.onNextIndexClick = function() {
+        if (_this.curActiveQuizIndex !== _this.quizItems.length - 1) {
+          return _this.setActiveModelByIndex(_this.curActiveQuizIndex + 1);
+        }
+      };
+      this.onPrevIndexClick = function() {
+        console.log(_this.curActiveQuizIndex);
+        if (_this.curActiveQuizIndex !== 0) {
+          return _this.setActiveModelByIndex(_this.curActiveQuizIndex - 1);
+        }
       };
       QuizItemModelsService.get().then(function(models) {
         _this.quizItems = models;
@@ -175,6 +188,9 @@
         if (ids != null) {
           return QuizItemModelsService.getAnswerModelsByIds(ids);
         }
+      };
+      this.setAnswer = function(id) {
+        return _this.curQuizItem.userAnswerId = id;
       };
       return this;
     }
