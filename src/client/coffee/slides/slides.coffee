@@ -3,9 +3,7 @@
 initQuizDecorator = (ctrl) ->
   (cb) ->
     ->
-      unless ctrl.curActiveQuizIndex?
-        ctrl.setSlideTemplate ctrl.pageTemplates.question
-        ctrl.setActiveModelByIndex 0
+      ctrl.initQuiz() unless ctrl.curActiveQuizIndex?
       cb.apply(null, arguments)
 
 
@@ -18,7 +16,7 @@ angular.module('test')
         question: 'question.html'
         results: 'results.html'
 
-      @curSlideTemplate = @pageTemplates.intro
+      @curPageTemplate = @pageTemplates.intro
       @quizItems = null
       @curActiveQuizIndex = null
       @curQuizItem = null
@@ -34,7 +32,7 @@ angular.module('test')
 
       @onNextIndexClick = =>
         if not @curActiveQuizIndex?
-          @setSlideTemplate @pageTemplates.question
+          @setPageTemplate @pageTemplates.question
           @setActiveModelByIndex 0
         else if @curActiveQuizIndex isnt @quizItems.length - 1
           @setActiveModelByIndex(@curActiveQuizIndex + 1)
@@ -50,21 +48,26 @@ angular.module('test')
       @getPossibleAnswersByIds = (ids) ->
         QuizItemModelsService.getAnswerModelsByIds ids if ids?
 
-      @setAnswer = (id) =>
-        @curQuizItem.userAnswerId = id
+      @setAnswer = (id) => @curQuizItem.setUserAnswerId id
 
-      @resetQuiz = =>
-        quizItem.resetAnswer() for quizItem in @quizItems
+      @resetQuiz = => quizItem.reset() for quizItem in @quizItems
 
       @initQuiz = =>
         @curActiveQuizIndex = 0
         @setActiveModelByIndex @curActiveQuizIndex
+        @setPageTemplate @pageTemplates.question
 
-      @setSlideTemplate = (template) =>
-        @curSlideTemplate = template
+      @setPageTemplate = (template) =>
+        @curPageTemplate = template
+        switch template
+          when @pageTemplates.intro then goToIntro()
+          when @pageTemplates.results then goToResults()
 
-      @isActiveIndex = (index) =>
-        @curActiveQuizIndex is index
+      @isActiveIndex = (index) => @curActiveQuizIndex is index
+
+      goToIntro = => @resetQuiz()
+
+      goToResults = => quizItem.validate() for quizItem in @quizItems
 
       # because of coffeescripts implied return at end, this causes bugs
       # when using angulars `controller as` syntax so we need to explicitly

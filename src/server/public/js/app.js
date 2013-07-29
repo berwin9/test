@@ -118,7 +118,7 @@
       this.orderNumber = orderNumber;
       this.possibleAnswerIds = null;
       this.correctAnswerIds = null;
-      this.userQuizItemAnswerModel = null;
+      this.userAnswerId = null;
     }
 
     QuizItemModel.prototype.validateUserAnswer = function() {};
@@ -133,6 +133,14 @@
 
     QuizItemModel.prototype.setCorrectAnswerIds = function(arr) {
       return this.correctAnswerIds = arr;
+    };
+
+    QuizItemModel.prototype.setUserAnswerId = function(id) {
+      return this.userAnswerId = id;
+    };
+
+    QuizItemModel.prototype.reset = function() {
+      return this.userAnswerId = null;
     };
 
     return QuizItemModel;
@@ -158,8 +166,7 @@
     return function(cb) {
       return function() {
         if (ctrl.curActiveQuizIndex == null) {
-          ctrl.setSlideTemplate(ctrl.pageTemplates.question);
-          ctrl.setActiveModelByIndex(0);
+          ctrl.initQuiz();
         }
         return cb.apply(null, arguments);
       };
@@ -168,13 +175,14 @@
 
   angular.module('test').controller('SlideCtrl', [
     '$scope', 'QuizItemModelsService', function($scope, QuizItemModelsService) {
-      var _this = this;
+      var goToIntro, goToResults,
+        _this = this;
       this.pageTemplates = {
         intro: 'intro.html',
         question: 'question.html',
         results: 'results.html'
       };
-      this.curSlideTemplate = this.pageTemplates.intro;
+      this.curPageTemplate = this.pageTemplates.intro;
       this.quizItems = null;
       this.curActiveQuizIndex = null;
       this.curQuizItem = null;
@@ -189,7 +197,7 @@
       });
       this.onNextIndexClick = function() {
         if (_this.curActiveQuizIndex == null) {
-          _this.setSlideTemplate(_this.pageTemplates.question);
+          _this.setPageTemplate(_this.pageTemplates.question);
           return _this.setActiveModelByIndex(0);
         } else if (_this.curActiveQuizIndex !== _this.quizItems.length - 1) {
           return _this.setActiveModelByIndex(_this.curActiveQuizIndex + 1);
@@ -209,7 +217,7 @@
         }
       };
       this.setAnswer = function(id) {
-        return _this.curQuizItem.userAnswerId = id;
+        return _this.curQuizItem.setUserAnswerId(id);
       };
       this.resetQuiz = function() {
         var quizItem, _i, _len, _ref, _results;
@@ -217,19 +225,39 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           quizItem = _ref[_i];
-          _results.push(quizItem.resetAnswer());
+          _results.push(quizItem.reset());
         }
         return _results;
       };
       this.initQuiz = function() {
         _this.curActiveQuizIndex = 0;
-        return _this.setActiveModelByIndex(_this.curActiveQuizIndex);
+        _this.setActiveModelByIndex(_this.curActiveQuizIndex);
+        return _this.setPageTemplate(_this.pageTemplates.question);
       };
-      this.setSlideTemplate = function(template) {
-        return _this.curSlideTemplate = template;
+      this.setPageTemplate = function(template) {
+        _this.curPageTemplate = template;
+        switch (template) {
+          case _this.pageTemplates.intro:
+            return goToIntro();
+          case _this.pageTemplates.results:
+            return goToResults();
+        }
       };
       this.isActiveIndex = function(index) {
         return _this.curActiveQuizIndex === index;
+      };
+      goToIntro = function() {
+        return _this.resetQuiz();
+      };
+      goToResults = function() {
+        var quizItem, _i, _len, _ref, _results;
+        _ref = _this.quizItems;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          quizItem = _ref[_i];
+          _results.push(quizItem.validate());
+        }
+        return _results;
       };
       return this;
     }

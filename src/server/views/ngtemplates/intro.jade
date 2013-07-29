@@ -1,10 +1,13 @@
 script(type="text/ng-template", id="intro.html")
-  .well
+  .well.row
     h3 Instructions
     ul
-      li Click on the next/back or page buttons above to start.
-      li Click on the answer of your choice to lock it in.
+      li Click on the "Start" button below to start the Quiz.
+      li Simply Click on the answer of your choice to lock it in.
       li You can jump to any question at any time.
+      li Pressing the "Intro" button or the "Reset" (only visible while in results view) button resets the Quiz.
       li
-        | You may exit the current quiz by pressing the "view results"
+        | You may exit the Quiz by pressing the "Results"
         | button (unanswered questions will be marked as incorrect)
+
+    a.btn.btn-large.btn-block.btn-success(href="#", "data-ng-click"="slide.initQuiz()") Start

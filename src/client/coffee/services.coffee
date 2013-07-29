@@ -44,17 +44,19 @@ class QuizItemModel
   constructor: (@id, @question, @orderNumber) ->
     @possibleAnswerIds = null
     @correctAnswerIds = null
-    @userQuizItemAnswerModel = null
+    @userAnswerId = null
 
   validateUserAnswer: ->
 
   isAnswered: -> @userQuizItemAnserModel?
 
-  setPossibleAnswerIds: (arr) ->
-    @possibleAnswerIds = arr
+  setPossibleAnswerIds: (arr) -> @possibleAnswerIds = arr
 
-  setCorrectAnswerIds: (arr) ->
-    @correctAnswerIds = arr
+  setCorrectAnswerIds: (arr) -> @correctAnswerIds = arr
+
+  setUserAnswerId: (id) -> @userAnswerId = id
+
+  reset: -> @userAnswerId = null
 
 class QuizItemAnswerModel
   constructor: (@id, @answer) ->
