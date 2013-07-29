@@ -14,6 +14,8 @@ exports.init = (mongoose, cb) ->
         unique: true
     hashedPassword: String
     salt: String
+    created_date: Date
+    updated_date: Date
 
   UserModel.virtual('id')
     .get -> @_id.toHexString()
@@ -40,6 +42,8 @@ exports.init = (mongoose, cb) ->
 
   UserModel.pre 'save', (next) ->
     if @isPasswordPresent()
+      @created_date = new Date() if not @created_date
+      @updated_date = new Date()
       next()
     else
       next new Error('Invalid password')
@@ -75,6 +79,36 @@ exports.init = (mongoose, cb) ->
         series: @series
 
 
+  QuizItemAnswersModel = new Schema
+    anwser:
+      type: String
+
+  QuizItemAnswersModel.virtual('id')
+    .get -> @_id.toHexString()
+
+  QuizItemAnswersModel.pre 'save', (next) ->
+    if next then next()
+
+
+  QuizItemModel = new Schema
+    order_number:
+      type: Number
+      index: true
+      unique: true
+    question:
+      type: String
+    correct_answers: [QuizItemAnswersModel]
+    possible_answers: [QuizItemAnswersModel]
+
+
+  QuizItemModel.virtual('id')
+    .get -> @_id.toHexString()
+
+  QuizItemModel.pre 'save', (next) ->
+    if next then next()
+
   mongoose.model 'UserModel', UserModel
   mongoose.model 'LoginTokenModel', LoginTokenModel
+  mongoose.model 'QuizItemAnswersModel', QuizItemAnswersModel
+  mongoose.model 'QuizItemModel', QuizItemModel
   cb()
