@@ -18,7 +18,7 @@ app.configure 'development', ->
   app.set 'view options', pretty: true
 
 app.configure 'production', ->
-  app.set 'db-uri', process.env.MONGOHQ_URL
+  app.set 'db-uri', process.env.MY_MONGO
 
 
 # keep in mind the order of registration matters for the middleware.
