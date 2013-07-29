@@ -22,6 +22,10 @@ angular.module('test')
 
       @close = (index) => @alerts.splice(index, 1)
 
+      @pushNotification = (message) =>
+        @alerts = [] if @alerts?
+        @alerts.push message
+
       # because of coffeescripts implied return at end, this causes bugs
       # when using angulars `controller as` syntax so we need to explicitly
       # return the controller instance

@@ -1,0 +1,8 @@
+script(type="text/ng-template", id="slide.html")
+  span('data-ng-bind'="slide.curActiveQuizItemModel.question")
+    
+  ol(type="a")
+    li("data-ng-repeat"="answerModel in slide.getPossibleAnswersByIds(slide.curActiveQuizItemModel.possibleAnswerIds)")
+      span("data-ng-bind"="answerModel.answer")
+
+
