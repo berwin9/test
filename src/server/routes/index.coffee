@@ -1,3 +1,8 @@
+parse = require('url').parse
+join = require('path').join
+fs = require 'fs'
+root = __dirname
+
 class Notification
   constructor: (@type, @message) ->
 
@@ -15,36 +20,37 @@ notifications =
     'Account creation failed on Registration Form.'
   )
 
-authenticate = (req, res, user) ->
-  remember = req.body['login-remember']?
-  req.session.userId = user.id
-  if remember
-    loginToken = new app.LoginTokenModel(email: user.email)
-    loginToken.save ->
-      # 2 week expiration for the loginToken
-      res.cookie 'loginToken', loginToken.cookieValue,
-        expires: new Date(Date.now() + (2 * 604800000))
-        path: '/'
-  res.redirect '/'
-
-badEmailOrPassword = (req, res) ->
-  res.render 'login.jade',
-    bootstrap:
-      notifications: [notifications.badEmailOrPassword]
-
-noUserFound = (req, res) ->
-  res.render 'login.jade',
-    bootstrap:
-      notifications: [notifications.noUserFound]
-
-accountCreationFailed = (req, res) ->
-  res.render 'login.jade',
-    bootstrap:
-      notifications: [notifications.accountCreationFailed]
-
-
 module.exports = (app) ->
   routes = {}
+
+  authenticate = (req, res, user) ->
+    remember = req.body['login-remember']?
+    req.session.userId = user.id
+    if remember
+      loginToken = new app.LoginTokenModel(email: user.email)
+      loginToken.save ->
+        # 2 week expiration for the loginToken
+        res.cookie 'loginToken', loginToken.cookieValue,
+          expires: new Date(Date.now() + (2 * 604800000))
+          path: '/'
+        res.redirect '/'
+    else
+      res.redirect '/'
+
+  badEmailOrPassword = (req, res) ->
+    res.render 'login.jade',
+      bootstrap:
+        notifications: [notifications.badEmailOrPassword]
+
+  noUserFound = (req, res) ->
+    res.render 'login.jade',
+      bootstrap:
+        notifications: [notifications.noUserFound]
+
+  accountCreationFailed = (req, res) ->
+    res.render 'login.jade',
+      bootstrap:
+        notifications: [notifications.accountCreationFailed]
 
   routes.index = (req, res) ->
     res.render 'index.jade'
@@ -80,5 +86,25 @@ module.exports = (app) ->
 
   routes.throwError = (req, res) ->
     throw Error()
+
+  routes.hamlRouter = (req, res) ->
+    stream = null
+    url = parse req.url
+    path = join root, url.pathname
+    fs.stat path, (err, stat) ->
+      if err?
+        if 'ENONENT' is err.code
+          res.statusCode = 404
+          res.end 'Not Found'
+        else
+          res.statusCode = 500
+          res.end 'Internal Server Error'
+      else
+        res.setHeader 'Content-Length', stat.size
+        stream = fs.createReadStream path
+        stream.pipe res
+        stream.on 'error', (err) ->
+          res.statusCode = 500
+          res.end('Internal Server Error')
 
   routes

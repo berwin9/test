@@ -7,7 +7,7 @@
     "start": "node app.coffee"
   },
   "dependencies": {
-    "express": "3.1.1",
+    "express": "3.3.4",
     "jade": "*",
     "consolidate": "0.9.1",
     "mongoose": "3.x.x",
@@ -24,10 +24,12 @@
     "grunt-contrib-less": "~0.6.4",
     "grunt-jasmine": "~0.1.0",
     "grunt-coffeelint": "0.0.7",
-    "mongodb" : "1.1.11" 
+    "mongodb" : "1.1.11"
   },
   "devDependencies": {
-      "jasmine-node": "1.3.1"
+      "jasmine-node": "1.3.1",
+      "karma": "x.x.x",
+      "grunt-regarde": "x.x.x"
   },
   "scripts": {
     "postinstall": "ls -al; ./node_modules/grunt/bin/grunt heroku; cd ./node_modules/grunt/bin; ls -al"

@@ -58,6 +58,7 @@ class App
     app.get '/logout', helpers.loadUser, routes.logout
     app.post '/login', routes.loginPost
     app.post '/register', routes.register
+    app.get '*.haml', routes.hamlRouter
     app.get '/:others', helpers.throwError
 
   initDb: (app, models, mongoose) ->
