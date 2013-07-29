@@ -1,7 +1,8 @@
+haml = require 'hamljs'
 parse = require('url').parse
 join = require('path').join
 fs = require 'fs'
-root = __dirname
+templateRoot = __dirname.replace(/routes$/, 'public')
 
 class Notification
   constructor: (@type, @message) ->
@@ -84,27 +85,21 @@ module.exports = (app) ->
       if err? then return accountCreationFailed req, res
       authenticate(req, res, user)
 
-  routes.throwError = (req, res) ->
-    throw Error()
-
   routes.hamlRouter = (req, res) ->
-    stream = null
     url = parse req.url
-    path = join root, url.pathname
-    fs.stat path, (err, stat) ->
+    path = join templateRoot, url.pathname
+    fs.readFile path, (err, data) ->
       if err?
-        if 'ENONENT' is err.code
-          res.statusCode = 404
-          res.end 'Not Found'
-        else
-          res.statusCode = 500
-          res.end 'Internal Server Error'
+        res.redirect '/500'
       else
-        res.setHeader 'Content-Length', stat.size
-        stream = fs.createReadStream path
-        stream.pipe res
-        stream.on 'error', (err) ->
-          res.statusCode = 500
-          res.end('Internal Server Error')
+        try
+          html = haml.render data.toString()
+          console.log html
+          res.writeHead 200,
+              'Content-Type': 'text/html',
+              'Content-Length': Buffer.byteLength html
+          res.end html
+        catch
+          res.redirect '/500'
 
   routes

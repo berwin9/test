@@ -1,5 +1,4 @@
 express = require 'express'
-engines = require 'consolidate'
 mongoose = require 'mongoose'
 mongo = require 'mongodb'
 url = require 'url'
@@ -32,7 +31,6 @@ class App
     # we also use 2 view engines so we can use haml(besides jade), but we can't use it fully
     # because of some drawbacks/quirks in hamljs
     app.engine 'jade', require('jade').__express
-    app.engine 'haml', engines.haml
     app.set 'views', __dirname + '/views'
     app.use express.logger()
     app.use express.favicon()
@@ -58,7 +56,7 @@ class App
     app.get '/logout', helpers.loadUser, routes.logout
     app.post '/login', routes.loginPost
     app.post '/register', routes.register
-    app.get '*.haml', routes.hamlRouter
+    app.get '/500', helpers.throwError
     app.get '/:others', helpers.throwError
 
   initDb: (app, models, mongoose) ->

@@ -64,7 +64,10 @@ module.exports = (grunt) ->
     regarde:
       coffee:
         files: ['src/client/coffee/**/*.coffee']
-        tasks: ['coffee']
+        tasks: ['cs']
+      less:
+        files: ['src/client/styles/**/*.less']
+        tasks: ['less:prod']
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
