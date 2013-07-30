@@ -31,6 +31,7 @@ html(class="no-js", lang="en")
               a.btn.btn-primary(href='/logout') Logout
 
     #notifications-container(
+      data-ng-cloak,
       data-ng-controller="NotificationCtrl as notification",
       data-ng-show="notification.hasNotifications()"
     )

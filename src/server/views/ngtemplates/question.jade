@@ -3,33 +3,33 @@ script(type="text/ng-template", id="question.html")
     #slides-nav-bar.pagination
       a.btn.btn-info.pull-left(
         href="#",
-        "data-ng-click"="slide.setPageTemplate(slide.pageTemplates.intro)"
+        data-ng-click="slide.setPageTemplate(slide.pageTemplates.intro)"
       ) Intro
 
       ul
         li.previous
-          a.fui-arrow-left(href="#", "data-ng-click"="slide.onPrevIndexClick()")
+          a.fui-arrow-left(href="#", data-ng-click="slide.onPrevIndexClick()")
         li(
-          "data-ng-repeat"="quizItemModel in slide.quizItems",
-          "data-ng-class"="{ 'active': slide.isActiveIndex($index) }"
+          data-ng-repeat="quizItemModel in slide.quizItems",
+          data-ng-class="{ 'active': slide.isActiveIndex($index) }"
         )
-          a(href="#", "data-ng-bind"="$index + 1", "data-ng-click"="slide.onSlideIndexClick($index)")
+          a(href="#", data-ng-bind="$index + 1", data-ng-click="slide.onSlideIndexClick($index)")
         li.next
-          a.fui-arrow-right(href="#", "data-ng-click"="slide.onNextIndexClick()")
+          a.fui-arrow-right(href="#", data-ng-click="slide.onNextIndexClick()")
 
       a.btn.btn-danger.pull-right(
         href="#",
-        "data-ng-click"="slide.setPageTemplate(slide.pageTemplates.results)"
+        data-ng-click="slide.setPageTemplate(slide.pageTemplates.results)"
       ) Results
 
   .row
-    h4("data-ng-bind"="'Question number: ' + (slide.curActiveQuizIndex + 1)")
-    div("data-test-markdown"="{{ slide.curQuizItem.question }}")
+    h4(data-ng-bind="'Question number: ' + (slide.curActiveQuizIndex + 1)")
+    div(data-test-markdown="{{ slide.curQuizItem.question }}")
     .well
       ol(type="a")
         li(
-          "data-ng-repeat"="answerModel in slide.getPossibleAnswersByIds(slide.curQuizItem.possibleAnswerIds)",
-          "data-ng-class"="{ 'alert-success well-small': slide.curQuizItem.userAnswerId === answerModel.id }",
-          "data-ng-click"="slide.setAnswer(answerModel.id)"
+          data-ng-repeat="answerModel in slide.getPossibleAnswersByIds(slide.curQuizItem.possibleAnswerIds)",
+          data-ng-class="{ 'alert-success well-small': slide.curQuizItem.userAnswerId === answerModel.id }",
+          data-ng-click="slide.setAnswer(answerModel.id)"
         )
-          span("data-ng-bind"="answerModel.answer")
+          span(data-ng-bind="answerModel.answer")
