@@ -30,7 +30,7 @@
 
 (function() {
   angular.module('test').controller('NotificationCtrl', [
-    '$timeout', 'BootstrapService', function($timeout, BootstrapService) {
+    'BootstrapService', function(BootstrapService) {
       var _this = this;
       this.alerts = BootstrapService.get();
       this.hasNotifications = function() {
@@ -199,7 +199,7 @@
   };
 
   angular.module('test').controller('SlideCtrl', [
-    '$scope', 'QuizItemModelsService', function($scope, QuizItemModelsService) {
+    'QuizItemModelsService', function(QuizItemModelsService) {
       var goToIntro, goToResults,
         _this = this;
       this.pageTemplates = {

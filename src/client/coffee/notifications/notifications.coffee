@@ -1,7 +1,7 @@
 angular.module('test')
 
-  .controller 'NotificationCtrl', ['$timeout', 'BootstrapService',
-    ($timeout, BootstrapService) ->
+  .controller 'NotificationCtrl', ['BootstrapService',
+    (BootstrapService) ->
       @alerts = BootstrapService.get()
 
       @hasNotifications = => !!(@alerts?.length)
