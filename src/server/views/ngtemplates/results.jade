@@ -10,7 +10,7 @@ script(type="text/ng-template", id="results.html")
       h2 Results
       .alert
         span(data-ng-bind="'you got ' + slide.sumCorrectAnswers() + ' out of ' + slide.quizItems.length + ' answers correct. '")
-        span The correct answers will highlighted in green below. Your answer will be in bold.
+        span The correct answers will be highlighted in green below. Your answer will be in bold.
 
     .row.answer-row(data-ng-repeat="quizItemModel in slide.quizItems")
       h4(data-ng-bind="'Anwser to question number: ' + ($index + 1)")
