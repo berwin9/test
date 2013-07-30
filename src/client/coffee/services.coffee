@@ -13,6 +13,7 @@ angular.module('test')
 
       get: ->
         $http.get(quizItemModelsUrl).then (response) ->
+          # TODO: break this up and make it accessible to be testable from the outside
           quizItemModels = []
           # build the models and cache them so we can just look it up later on
           for quizItem in response.data
