@@ -144,11 +144,15 @@
     };
 
     QuizItemModel.prototype.isValid = function() {
+      return this.isValidAnswer(this.userAnswerId);
+    };
+
+    QuizItemModel.prototype.isValidAnswer = function(answerId) {
       var correctAnswer, _i, _len, _ref;
       _ref = this.correctAnswerIds;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         correctAnswer = _ref[_i];
-        if (correctAnswer === this.userAnswerId) {
+        if (correctAnswer === answerId) {
           return true;
         }
       }
@@ -270,6 +274,7 @@
         }
         return validAnswers;
       };
+      this.isValidAnswer = function(quizModel, answerModel) {};
       goToIntro = function() {
         return _this.resetQuiz();
       };

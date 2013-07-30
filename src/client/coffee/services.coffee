@@ -59,9 +59,11 @@ class QuizItemModel
 
   reset: -> @userAnswerId = null
 
-  isValid: ->
+  isValid: -> @isValidAnswer @userAnswerId
+
+  isValidAnswer: (answerId) ->
     for correctAnswer in @correctAnswerIds \
-    when correctAnswer is @userAnswerId
+    when correctAnswer is answerId
       return true
     return false
 

@@ -70,6 +70,10 @@ angular.module('test')
         ++validAnswers for quizItem in @quizItems when quizItem.isValid()
         validAnswers
 
+      @isValidAnswer = (quizModel, answerModel) =>
+
+        
+
       goToIntro = => @resetQuiz()
 
       goToResults = => quizItem.validate() for quizItem in @quizItems
@@ -89,5 +93,4 @@ angular.module('test')
       return not showIndexes[index] = false
 
     @toggleHide = (index) => showIndexes[index] = not showIndexes[index]
-
   )
