@@ -1,4 +1,3 @@
-haml = require 'hamljs'
 parse = require('url').parse
 join = require('path').join
 fs = require 'fs'
