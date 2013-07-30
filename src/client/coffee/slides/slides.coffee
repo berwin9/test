@@ -1,5 +1,5 @@
 # decorator to initialize the SlideCtrl if its in a non quiz page
-# (like the intro and results page) then this decorator will init it model 0
+# (like the intro and results page) then this decorator will init it to model 0
 initQuizDecorator = (ctrl) ->
   (cb) ->
     ->
