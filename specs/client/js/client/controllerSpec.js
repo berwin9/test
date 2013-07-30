@@ -3,7 +3,7 @@
     beforeEach(function() {
       return module('test');
     });
-    return describe('SlideCtrl', function() {
+    describe('SlideCtrl', function() {
       var $controller, $httpBackend, QuizItemModelsService, methodSpy, mockPromise, quizAnswers, quizItems, slide;
       slide = null;
       methodSpy = null;
@@ -176,6 +176,26 @@
         results = slide.getPossibleAnswersByIds([1, 2]);
         expect(results[0].id).toBe('1');
         return expect(results[1].id).toBe('2');
+      });
+    });
+    return describe('ResultsCtrl', function() {
+      var results;
+      results = null;
+      beforeEach(inject(function(_$controller_, $rootScope) {
+        var $controller, scope;
+        $controller = _$controller_;
+        scope = $rootScope.$new();
+        return results = $controller('ResultsCtrl', {
+          $scope: scope
+        });
+      }));
+      it('should default an index to a hidden state', function() {
+        return expect(result.isHidden(1)).toBe(true);
+      });
+      return it('should toggle an items visibility state', function() {
+        expect(results.isHidden(1)).toBe(true);
+        results.toggleHide(1);
+        return expect(results.isHidden(1)).toBe(false);
       });
     });
   });

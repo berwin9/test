@@ -176,3 +176,21 @@ describe 'controllers', ->
       results = slide.getPossibleAnswersByIds([1, 2])
       expect(results[0].id).toBe '1'
       expect(results[1].id).toBe '2'
+
+
+  describe 'ResultsCtrl', ->
+    results = null
+
+    beforeEach(inject (_$controller_, $rootScope) ->
+      $controller = _$controller_
+      scope = $rootScope.$new()
+      results = $controller 'ResultsCtrl', $scope: scope
+    )
+
+    it 'should default an index to a hidden state', ->
+      expect(result.isHidden 1).toBe true
+
+    it 'should toggle an items visibility state', ->
+      expect(results.isHidden 1).toBe true
+      results.toggleHide 1
+      expect(results.isHidden 1).toBe false
