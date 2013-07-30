@@ -1,8 +1,6 @@
 (function() {
   describe('controllers', function() {
-    beforeEach(function() {
-      return module('test');
-    });
+    beforeEach(module('test'));
     describe('SlideCtrl', function() {
       var $controller, $httpBackend, QuizItemModelsService, methodSpy, mockPromise, quizAnswers, quizItems, slide;
       slide = null;
@@ -23,7 +21,7 @@
         quizAnswers = [new Models.QuizItemAnswerModel(1, '1'), new Models.QuizItemAnswerModel(1, '2'), new Models.QuizItemAnswerModel(1, '3')];
         for (_i = 0, _len = quizItems.length; _i < _len; _i++) {
           quizItem = quizItems[_i];
-          quizItem.setPossibleAnswerIds([1, 2]);
+          quizItem.setPossibleAnswerIds([1, 2, 3]);
         }
         for (index = _j = 0, _len1 = quizItems.length; _j < _len1; index = ++_j) {
           quizItem = quizItems[index];
@@ -190,7 +188,7 @@
         });
       }));
       it('should default an index to a hidden state', function() {
-        return expect(result.isHidden(1)).toBe(true);
+        return expect(results.isHidden(1)).toBe(true);
       });
       return it('should toggle an items visibility state', function() {
         expect(results.isHidden(1)).toBe(true);

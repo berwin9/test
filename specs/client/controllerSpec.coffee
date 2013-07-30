@@ -1,6 +1,6 @@
 describe 'controllers', ->
 
-  beforeEach -> module 'test'
+  beforeEach(module 'test')
 
   describe 'SlideCtrl', ->
     slide = null
@@ -18,7 +18,7 @@ describe 'controllers', ->
       QuizItemModelsService = _QuizItemModelsService_
       $httpBackend.whenGET().respond fakePayload
 
-      # this will do fow now until we can  refactor the QuizItemModelsService
+      # this will do fow now until we can refactor the QuizItemModelsService
       # to expose its functionality that builds the models
       quizItems = [
         new Models.QuizItemModel('1', '1?', 1)
@@ -30,7 +30,7 @@ describe 'controllers', ->
         new Models.QuizItemAnswerModel(1, '2')
         new Models.QuizItemAnswerModel(1, '3')
       ]
-      quizItem.setPossibleAnswerIds([1, 2]) for quizItem in quizItems
+      quizItem.setPossibleAnswerIds([1, 2, 3]) for quizItem in quizItems
       quizItem.setCorrectAnswerIds([index]) for quizItem, index in quizItems
 
       $httpBackend.expectGET().respond(fakePayload)
@@ -188,7 +188,7 @@ describe 'controllers', ->
     )
 
     it 'should default an index to a hidden state', ->
-      expect(result.isHidden 1).toBe true
+      expect(results.isHidden 1).toBe true
 
     it 'should toggle an items visibility state', ->
       expect(results.isHidden 1).toBe true

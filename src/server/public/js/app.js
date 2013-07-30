@@ -125,6 +125,12 @@
             _results.push(_quizItemAnswersModelCache[id]);
           }
           return _results;
+        },
+        getQuizAnswerModelsCache: function() {
+          return _quizItemAnswersModelCache;
+        },
+        getQuizItemModelsCache: function() {
+          return _quizItemModelCache;
         }
       };
     }

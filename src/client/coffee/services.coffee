@@ -42,6 +42,10 @@ angular.module('test')
 
       getAnswerModelsByIds: (ids) ->
         (_quizItemAnswersModelCache[id] for id in ids)
+
+      getQuizAnswerModelsCache: -> _quizItemAnswersModelCache
+
+      getQuizItemModelsCache: -> _quizItemModelCache
   ])
 
   .factory('Models', ->
