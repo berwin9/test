@@ -194,3 +194,43 @@ describe 'controllers', ->
       expect(results.isHidden 1).toBe true
       results.toggleHide 1
       expect(results.isHidden 1).toBe false
+
+
+  describe 'NotificationCtrl', ->
+    notification = null
+    BootstrapService = null
+    methodSpy = null
+
+    beforeEach(inject (_$controller_, $rootScope, _BootstrapService_) ->
+      $controller = _$controller_
+      BootstrapService = _BootstrapService_
+
+      methodSpy = spyOn(BootstrapService, 'get').andReturn([
+        { type: 'alert-info', message: 'the quick brown fox' }
+        { type: 'alert-info', message: 'the quick brown fox2'}
+      ])
+      scope = $rootScope.$new()
+      notification = $controller(
+        'NotificationCtrl',
+        {
+          $scope: scope
+          BootstrapService: BootstrapService
+        }
+      )
+    )
+
+    it 'should call BootstrapService.get once', ->
+      expect(methodSpy.callCount).toBe 1
+
+    it 'should remove the message specified by the index', ->
+      expect(notification.alerts.length).toBe 2
+      notification.close 0
+      expect(notification.alerts.length).toBe 1
+      expect(notification.alerts[0].message).toEqual 'the quick brown fox2'
+
+    it 'should identify if it has any notifications', ->
+      expect(notification.hasNotifications()).toBe true
+      notification.close 0
+      notification.close 0
+      expect(notification.hasNotifications()).toBe false
+

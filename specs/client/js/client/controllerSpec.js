@@ -176,7 +176,7 @@
         return expect(results[1].id).toBe('2');
       });
     });
-    return describe('ResultsCtrl', function() {
+    describe('ResultsCtrl', function() {
       var results;
       results = null;
       beforeEach(inject(function(_$controller_, $rootScope) {
@@ -194,6 +194,46 @@
         expect(results.isHidden(1)).toBe(true);
         results.toggleHide(1);
         return expect(results.isHidden(1)).toBe(false);
+      });
+    });
+    return describe('NotificationCtrl', function() {
+      var BootstrapService, methodSpy, notification;
+      notification = null;
+      BootstrapService = null;
+      methodSpy = null;
+      beforeEach(inject(function(_$controller_, $rootScope, _BootstrapService_) {
+        var $controller, scope;
+        $controller = _$controller_;
+        BootstrapService = _BootstrapService_;
+        methodSpy = spyOn(BootstrapService, 'get').andReturn([
+          {
+            type: 'alert-info',
+            message: 'the quick brown fox'
+          }, {
+            type: 'alert-info',
+            message: 'the quick brown fox2'
+          }
+        ]);
+        scope = $rootScope.$new();
+        return notification = $controller('NotificationCtrl', {
+          $scope: scope,
+          BootstrapService: BootstrapService
+        });
+      }));
+      it('should call BootstrapService.get once', function() {
+        return expect(methodSpy.callCount).toBe(1);
+      });
+      it('should remove the message specified by the index', function() {
+        expect(notification.alerts.length).toBe(2);
+        notification.close(0);
+        expect(notification.alerts.length).toBe(1);
+        return expect(notification.alerts[0].message).toEqual('the quick brown fox2');
+      });
+      return it('should identify if it has any notifications', function() {
+        expect(notification.hasNotifications()).toBe(true);
+        notification.close(0);
+        notification.close(0);
+        return expect(notification.hasNotifications()).toBe(false);
       });
     });
   });
