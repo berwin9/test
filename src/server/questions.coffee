@@ -39,7 +39,7 @@ module.exports = (app) ->
       orderNumber: 2
       question:
         """
-        To create a columned list of two-line email subjects and dates for  
+        To create a columned list of two-line email subjects and dates for
         a master-detail view, which are the most semantically correct?
         """
       correctAnswers: [q2answers[1]]
@@ -73,7 +73,7 @@ module.exports = (app) ->
       orderNumber: 4
       question:
         """
-        `____` and `____` would be the HTML tags you  
+        `____` and `____` would be the HTML tags you
         would use to display a menu item and its description.'
         """
       correctAnswers: [q4answers[0]]
@@ -90,11 +90,11 @@ module.exports = (app) ->
       orderNumber: 5
       question:
         """
-        Given `<div id="outer"><div class="inner"></div></div>`,  
+        Given `<div id="outer"><div class="inner"></div></div>`,
         which of these two is the most performant way to select the inner div?
         """
       correctAnswers: [q5answers[0]]
-      possibleAnswers: q5
+      possibleAnswers: q5answers
 
     q6answers = [
       new QuizItemAnswerModel
@@ -127,7 +127,7 @@ module.exports = (app) ->
               }
             })
 
-        Which message will be returned by injecting this service  
+        Which message will be returned by injecting this service
         and executing `myService.getMessage()`
         """
       correctAnswers: [q6answers[1]]
