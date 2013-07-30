@@ -121,7 +121,7 @@
       this.userAnswerId = null;
     }
 
-    QuizItemModel.prototype.validateUserAnswer = function() {};
+    QuizItemModel.prototype.validate = function() {};
 
     QuizItemModel.prototype.isAnswered = function() {
       return this.userQuizItemAnserModel != null;
@@ -141,6 +141,18 @@
 
     QuizItemModel.prototype.reset = function() {
       return this.userAnswerId = null;
+    };
+
+    QuizItemModel.prototype.isValid = function() {
+      var correctAnswer, _i, _len, _ref;
+      _ref = this.correctAnswerIds;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        correctAnswer = _ref[_i];
+        if (correctAnswer === this.userAnswerId) {
+          return true;
+        }
+      }
+      return false;
     };
 
     return QuizItemModel;
@@ -245,6 +257,18 @@
       };
       this.isActiveIndex = function(index) {
         return _this.curActiveQuizIndex === index;
+      };
+      this.sumCorrectAnswers = function() {
+        var quizItem, validAnswers, _i, _len, _ref;
+        validAnswers = 0;
+        _ref = _this.quizItems;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          quizItem = _ref[_i];
+          if (quizItem.isValid()) {
+            ++validAnswers;
+          }
+        }
+        return validAnswers;
       };
       goToIntro = function() {
         return _this.resetQuiz();

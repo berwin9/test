@@ -65,6 +65,11 @@ angular.module('test')
 
       @isActiveIndex = (index) => @curActiveQuizIndex is index
 
+      @sumCorrectAnswers = =>
+        validAnswers = 0
+        ++validAnswers for quizItem in @quizItems when quizItem.isValid()
+        validAnswers
+
       goToIntro = => @resetQuiz()
 
       goToResults = => quizItem.validate() for quizItem in @quizItems

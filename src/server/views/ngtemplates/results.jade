@@ -1,2 +1,15 @@
 script(type="text/ng-template", id="results.html")
-  h1 test
+  h2 Results
+  .alert("data-ng-bind"="'you got ' + slide.sumCorrectAnswers() + ' out of ' + slide.quizItems.length + ' answers correct.'")
+
+  .row("data-ng-repeat"="quizItem in slides.quizItems")
+    h4("data-ng-bind"="'Question number: ' + (slide.curActiveQuizIndex + 1)")
+    span('data-ng-bind'="slide.curQuizItem.question")
+    .well
+      ol(type="a")
+        li(
+          "data-ng-repeat"="answerModel in slide.getPossibleAnswersByIds(slide.curQuizItem.possibleAnswerIds)",
+          "data-ng-class"="{ 'alert-success well-small': slide.curQuizItem.userAnswerId === answerModel.id }",
+          "data-ng-click"="slide.setAnswer(answerModel.id)"
+        )
+          span("data-ng-bind"="answerModel.answer")
