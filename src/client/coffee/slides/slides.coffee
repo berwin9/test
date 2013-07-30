@@ -9,8 +9,8 @@ initQuizDecorator = (ctrl) ->
 
 angular.module('test')
 
-  .controller('SlideCtrl', ['$scope', 'QuizItemModelsService',
-    ($scope, QuizItemModelsService) ->
+  .controller('SlideCtrl', ['QuizItemModelsService',
+    (QuizItemModelsService) ->
       @pageTemplates =
         intro: 'intro.html'
         question: 'question.html'
