@@ -7,15 +7,10 @@ basePath = '../';
 files = [
     JASMINE,
     JASMINE_ADAPTER,
-    'lib/jquery/jquery-1.9.1.js',
-    'lib/underscore/underscore.js',
-    'lib/angular/angular.1.1.5.js',
-    'lib/angular/angular-*.js',
-    'lib/angularstrap/angular-strap.js',
-    'test/lib/angular/angular-mocks.js',
-    'common/util.js',
-    'editor/**/*.js',
-    'test/unit/**/*.js',
+    'src/server/public/js/libs.js',
+    'specs/libs/angular/angular-mocks.js',
+    'src/server/public/js/app.js',
+    'specs/client/js/client/*.js'
 ];
 
 autoWatch = true;

@@ -6,7 +6,7 @@ angular.module('test')
     get: ->
       window.__bootstrapData.notifications if window.__bootstrapData?
 
-  .factory 'QuizItemModelsService', ['$http', 'quizItemModelsUrl', ($http, quizItemModelsUrl) ->
+  .factory('QuizItemModelsService', ['$http', 'quizItemModelsUrl', ($http, quizItemModelsUrl) ->
     _quizItemModelCache = {}
     _quizItemAnswersModelCache = {}
 
@@ -40,38 +40,44 @@ angular.module('test')
 
     getAnswerModelsByIds: (ids) ->
       (_quizItemAnswersModelCache[id] for id in ids)
-  ]
+  ])
+
+  .factory('Models', ->
+    class QuizItemModel
+
+      constructor: (@id, @question, @orderNumber) ->
+        @possibleAnswerIds = null
+        @correctAnswerIds = null
+        @userAnswerId = null
+        @_isValid = false
+
+      validate: ->
+        @_isValid = @isValidAnswer @userAnswerId
+
+      isAnswered: -> @userQuizItemAnserModel?
+
+      setPossibleAnswerIds: (arr) -> @possibleAnswerIds = arr
+
+      setCorrectAnswerIds: (arr) -> @correctAnswerIds = arr
+
+      setUserAnswerId: (id) -> @userAnswerId = id
+
+      reset: -> @userAnswerId = null
+
+      isValid: -> @_isValid
+
+      isValidAnswer: (answerId) ->
+        for correctAnswer in @correctAnswerIds \
+        when correctAnswer is answerId
+          return true
+        return false
 
 
-class QuizItemModel
+    class QuizItemAnswerModel
 
-  constructor: (@id, @question, @orderNumber) ->
-    @possibleAnswerIds = null
-    @correctAnswerIds = null
-    @userAnswerId = null
-    @_isValid = false
+      constructor: (@id, @answer) ->
 
-  validate: ->
-    @_isValid = @isValidAnswer @userAnswerId
-
-  isAnswered: -> @userQuizItemAnserModel?
-
-  setPossibleAnswerIds: (arr) -> @possibleAnswerIds = arr
-
-  setCorrectAnswerIds: (arr) -> @correctAnswerIds = arr
-
-  setUserAnswerId: (id) -> @userAnswerId = id
-
-  reset: -> @userAnswerId = null
-
-  isValid: -> @_isValid
-
-  isValidAnswer: (answerId) ->
-    for correctAnswer in @correctAnswerIds \
-    when correctAnswer is answerId
-      return true
-    return false
-
-
-class QuizItemAnswerModel
-  constructor: (@id, @answer) ->
+    models =
+      QuizItemAnswerModel: QuizItemAnswerModel
+      QuizItemModel: QuizItemModel
+  )
