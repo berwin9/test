@@ -39,7 +39,7 @@ module.exports = (app) ->
       orderNumber: 2
       question:
         """
-        To create a columned list of two-line email subjects and dates for
+        To create a columned list of two-line email subjects and dates for  
         a master-detail view, which are the most semantically correct?
         """
       correctAnswers: [q2answers[1]]
@@ -62,17 +62,21 @@ module.exports = (app) ->
 
     q4answers = [
       new QuizItemAnswerModel
-        answer: 'stub answer'
+        answer: '<dt>+<dd>'
+      new QuizItemAnswerModel
+        answer: '<li>+<a>'
+      new QuizItemAnswerModel
+        answer: '<p>+<br>'
     ]
 
     q4 = new QuizItemModel
       orderNumber: 4
       question:
         """
-        ____ and ____ would be the HTML tags you
+        `____` and `____` would be the HTML tags you  
         would use to display a menu item and its description.'
         """
-      correctAnswers: q4answers
+      correctAnswers: [q4answers[0]]
       possibleAnswers: q4answers
 
     q5answers = [
@@ -86,7 +90,7 @@ module.exports = (app) ->
       orderNumber: 5
       question:
         """
-        Given <div id=”outer”><div class=”inner”></div></div>,
+        Given `<div id="outer"><div class="inner"></div></div>`,  
         which of these two is the most performant way to select the inner div?
         """
       correctAnswers: [q5answers[0]]
@@ -107,26 +111,26 @@ module.exports = (app) ->
         """
         Given this:
 
-        angular.module('myModule').service('myService',function() {
-          var message = "Message one!"
-          var getMessage = function() {
-            return this.message
-          }
-          this.message = "Message two!"
-          this.getMessage = function() { return message }
+            angular.module('myModule').service('myService',function() {
+              var message = "Message one!"
+              var getMessage = function() {
+                return this.message
+              }
+              this.message = "Message two!"
+              this.getMessage = function() { return message }  
 
-          function() {
-            {
-              getMessage: getMessage,
-              message: "Message three!"
-            }
-          }
-        }
+              function() {
+                {
+                  getMessage: getMessage,
+                  message: "Message three!"
+                }
+              }
+            })
 
-        Which message will be returned by injecting this service
-        and executing "myService.getMessage()"
+        Which message will be returned by injecting this service  
+        and executing `myService.getMessage()`
         """
-      correctAnswers: q6answers
+      correctAnswers: [q6answers[1]]
       possibleAnswers: q6answers
 
 
