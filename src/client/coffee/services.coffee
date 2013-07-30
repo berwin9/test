@@ -58,8 +58,7 @@ angular.module('test')
         @userAnswerId = null
         @_isValid = false
 
-      validate: ->
-        @_isValid = @isValidAnswer @userAnswerId
+      validate: -> @_isValid = @isValidAnswer @userAnswerId
 
       isAnswered: -> @userQuizItemAnserModel?
 
