@@ -20,10 +20,10 @@ script(type="text/ng-template", id="results.html")
           href="#",
           data-ng-click="result.toggleHide($index)",
           data-ng-bind="result.isHidden($index) ? 'show' : 'hide'"
-        ) 
+        )
 
       .row
-        span(data-ng-bind="quizItemModel.question")
+        div(data-test-markdown="{{ quizItemModel.question }}")
         .well(data-ng-hide="result.isHidden($index)")
           ol(type="a")
             li(
