@@ -4,7 +4,9 @@ fs = require 'fs'
 
 
 class Notification
+
   constructor: (@type, @message) ->
+
 
 notifications =
   noUserFound: new Notification(
@@ -19,6 +21,7 @@ notifications =
     'alert-danger',
     'Account creation failed on Registration Form.'
   )
+
 
 module.exports = (app) ->
   routes = {}
