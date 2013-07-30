@@ -21,6 +21,9 @@ angular.module('test')
       @curActiveQuizIndex = null
       @curQuizItem = null
 
+      QuizItemModelsService.get().then (models) =>
+        @quizItems = models
+
       @setActiveModelByIndex = (index) =>
         if @quizItems?
           @curActiveQuizIndex = index
@@ -41,9 +44,6 @@ angular.module('test')
         =>
           if @curActiveQuizIndex isnt 0
             @setActiveModelByIndex(@curActiveQuizIndex - 1)
-
-      QuizItemModelsService.get().then (models) =>
-        @quizItems = models
 
       @getPossibleAnswersByIds = (ids) ->
         QuizItemModelsService.getAnswerModelsByIds ids if ids?
@@ -92,5 +92,4 @@ angular.module('test')
       return not showIndexes[index] = false
 
     @toggleHide = (index) => showIndexes[index] = not showIndexes[index]
-
   )

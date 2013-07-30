@@ -28,6 +28,7 @@
   "devDependencies": {
     "jasmine-node": "1.3.1",
     "karma": "x.x.x",
+    "grunt-karma": "x.x.x",
     "grunt-regarde": "x.x.x"
   },
   "scripts": {

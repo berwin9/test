@@ -70,8 +70,6 @@
 }).call(this);
 
 (function() {
-  var QuizItemAnswerModel, QuizItemModel;
-
   angular.module('test').value('quizItemModelsUrl', '/questions').factory('BootstrapService', function() {
     return {
       get: function() {
@@ -81,7 +79,7 @@
       }
     };
   }).factory('QuizItemModelsService', [
-    '$http', 'quizItemModelsUrl', function($http, quizItemModelsUrl) {
+    '$http', 'quizItemModelsUrl', 'Models', function($http, quizItemModelsUrl, Models) {
       var _quizItemAnswersModelCache, _quizItemModelCache;
       _quizItemModelCache = {};
       _quizItemAnswersModelCache = {};
@@ -93,12 +91,12 @@
             _ref = response.data;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               quizItem = _ref[_i];
-              quizItemModel = new QuizItemModel(quizItem._id, quizItem.question, quizItem.orderNumber);
+              quizItemModel = new Models.QuizItemModel(quizItem._id, quizItem.question, quizItem.orderNumber);
               possibleAnswerIds = [];
               _ref1 = quizItem.possibleAnswers;
               for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
                 answerItem = _ref1[_j];
-                quizItemAnswerModel = new QuizItemAnswerModel(answerItem._id, answerItem.answer);
+                quizItemAnswerModel = new Models.QuizItemAnswerModel(answerItem._id, answerItem.answer);
                 possibleAnswerIds.push(quizItemAnswerModel.id);
                 _quizItemAnswersModelCache[quizItemAnswerModel.id] = quizItemAnswerModel;
               }
@@ -127,75 +125,85 @@
             _results.push(_quizItemAnswersModelCache[id]);
           }
           return _results;
+        },
+        getQuizAnswerModelsCache: function() {
+          return _quizItemAnswersModelCache;
+        },
+        getQuizItemModelsCache: function() {
+          return _quizItemModelCache;
         }
       };
     }
-  ]);
-
-  QuizItemModel = (function() {
-    function QuizItemModel(id, question, orderNumber) {
-      this.id = id;
-      this.question = question;
-      this.orderNumber = orderNumber;
-      this.possibleAnswerIds = null;
-      this.correctAnswerIds = null;
-      this.userAnswerId = null;
-      this._isValid = false;
-    }
-
-    QuizItemModel.prototype.validate = function() {
-      return this._isValid = this.isValidAnswer(this.userAnswerId);
-    };
-
-    QuizItemModel.prototype.isAnswered = function() {
-      return this.userQuizItemAnserModel != null;
-    };
-
-    QuizItemModel.prototype.setPossibleAnswerIds = function(arr) {
-      return this.possibleAnswerIds = arr;
-    };
-
-    QuizItemModel.prototype.setCorrectAnswerIds = function(arr) {
-      return this.correctAnswerIds = arr;
-    };
-
-    QuizItemModel.prototype.setUserAnswerId = function(id) {
-      return this.userAnswerId = id;
-    };
-
-    QuizItemModel.prototype.reset = function() {
-      return this.userAnswerId = null;
-    };
-
-    QuizItemModel.prototype.isValid = function() {
-      return this._isValid;
-    };
-
-    QuizItemModel.prototype.isValidAnswer = function(answerId) {
-      var correctAnswer, _i, _len, _ref;
-      _ref = this.correctAnswerIds;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        correctAnswer = _ref[_i];
-        if (correctAnswer === answerId) {
-          return true;
-        }
+  ]).factory('Models', function() {
+    var QuizItemAnswerModel, QuizItemModel, models;
+    QuizItemModel = (function() {
+      function QuizItemModel(id, question, orderNumber) {
+        this.id = id;
+        this.question = question;
+        this.orderNumber = orderNumber;
+        this.possibleAnswerIds = null;
+        this.correctAnswerIds = null;
+        this.userAnswerId = null;
+        this._isValid = false;
       }
-      return false;
+
+      QuizItemModel.prototype.validate = function() {
+        return this._isValid = this.isValidAnswer(this.userAnswerId);
+      };
+
+      QuizItemModel.prototype.isAnswered = function() {
+        return this.userQuizItemAnserModel != null;
+      };
+
+      QuizItemModel.prototype.setPossibleAnswerIds = function(arr) {
+        return this.possibleAnswerIds = arr;
+      };
+
+      QuizItemModel.prototype.setCorrectAnswerIds = function(arr) {
+        return this.correctAnswerIds = arr;
+      };
+
+      QuizItemModel.prototype.setUserAnswerId = function(id) {
+        return this.userAnswerId = id;
+      };
+
+      QuizItemModel.prototype.reset = function() {
+        return this.userAnswerId = null;
+      };
+
+      QuizItemModel.prototype.isValid = function() {
+        return this._isValid;
+      };
+
+      QuizItemModel.prototype.isValidAnswer = function(answerId) {
+        var correctAnswer, _i, _len, _ref;
+        _ref = this.correctAnswerIds;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          correctAnswer = _ref[_i];
+          if (correctAnswer === answerId) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      return QuizItemModel;
+
+    })();
+    QuizItemAnswerModel = (function() {
+      function QuizItemAnswerModel(id, answer) {
+        this.id = id;
+        this.answer = answer;
+      }
+
+      return QuizItemAnswerModel;
+
+    })();
+    return models = {
+      QuizItemAnswerModel: QuizItemAnswerModel,
+      QuizItemModel: QuizItemModel
     };
-
-    return QuizItemModel;
-
-  })();
-
-  QuizItemAnswerModel = (function() {
-    function QuizItemAnswerModel(id, answer) {
-      this.id = id;
-      this.answer = answer;
-    }
-
-    return QuizItemAnswerModel;
-
-  })();
+  });
 
 }).call(this);
 
@@ -226,6 +234,9 @@
       this.quizItems = null;
       this.curActiveQuizIndex = null;
       this.curQuizItem = null;
+      QuizItemModelsService.get().then(function(models) {
+        return _this.quizItems = models;
+      });
       this.setActiveModelByIndex = function(index) {
         if (_this.quizItems != null) {
           _this.curActiveQuizIndex = index;
@@ -247,9 +258,6 @@
         if (_this.curActiveQuizIndex !== 0) {
           return _this.setActiveModelByIndex(_this.curActiveQuizIndex - 1);
         }
-      });
-      QuizItemModelsService.get().then(function(models) {
-        return _this.quizItems = models;
       });
       this.getPossibleAnswersByIds = function(ids) {
         if (ids != null) {

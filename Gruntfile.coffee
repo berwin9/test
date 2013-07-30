@@ -13,6 +13,11 @@ module.exports = (grunt) ->
       compile:
         files:
           'src/server/public/js/app.js': ['src/client/coffee/**/*.coffee']
+      clientSpecs:
+        files: grunt.file.expandMapping(["specs/client/*.coffee"], "specs/client/js/", {
+          rename: (destBase, destPath) ->
+            destBase + destPath.replace(/\.coffee$/, ".js").replace(/specs\//, "")
+        })
 
     concat:
       js:
@@ -68,6 +73,27 @@ module.exports = (grunt) ->
       less:
         files: ['src/client/styles/**/*.less']
         tasks: ['less:prod']
+      test:
+        files: ['specs/client/*.coffee']
+        tasks: ['test', 'karma:unit']
+
+    karma:
+      options:
+        configFile: './config/karma.conf.js'
+        runnerPort: 9999
+        reporters: ['dots']
+        colors: true
+      e2e:
+        configFile: './config/karma-e2e.conf.js'
+        singleRun: true
+        autoWatch: true
+      e2elive:
+        configFile: './config/karma-e2e.conf.js'
+      unit:
+        singleRun: true
+      dev:
+        autoWatch: true
+        browsers: ['Chrome']
 
     karma:
       options:
@@ -100,6 +126,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-karma'
 
   grunt.registerTask 'cs', ['copy:coffee', 'coffee', 'concat:js']
+  grunt.registerTask 'test', ['default', 'clean:sourceMaps', 'coffee:clientSpecs']
   grunt.registerTask 'production', ['default', 'clean:sourceMaps']
   grunt.registerTask 'default', ['cs', 'less:prod']
   grunt.registerTask 'heroku', ['default']
