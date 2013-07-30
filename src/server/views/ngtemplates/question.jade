@@ -24,7 +24,7 @@ script(type="text/ng-template", id="question.html")
 
   .row
     h4("data-ng-bind"="'Question number: ' + (slide.curActiveQuizIndex + 1)")
-    span('data-ng-bind'="slide.curQuizItem.question")
+    div("data-test-markdown"="{{ slide.curQuizItem.question }}")
     .well
       ol(type="a")
         li(

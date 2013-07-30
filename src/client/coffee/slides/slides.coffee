@@ -71,8 +71,7 @@ angular.module('test')
         validAnswers
 
       @isValidAnswer = (quizModel, answerModel) =>
-
-        
+        quizModel.isValidAnswer(answerModel.id)
 
       goToIntro = => @resetQuiz()
 
@@ -93,4 +92,5 @@ angular.module('test')
       return not showIndexes[index] = false
 
     @toggleHide = (index) => showIndexes[index] = not showIndexes[index]
+
   )

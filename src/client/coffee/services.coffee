@@ -46,8 +46,10 @@ class QuizItemModel
     @possibleAnswerIds = null
     @correctAnswerIds = null
     @userAnswerId = null
+    @_isValid = false
 
   validate: ->
+    @_isValid = @isValidAnswer @userAnswerId
 
   isAnswered: -> @userQuizItemAnserModel?
 
@@ -59,7 +61,7 @@ class QuizItemModel
 
   reset: -> @userAnswerId = null
 
-  isValid: -> @isValidAnswer @userAnswerId
+  isValid: -> @_isValid
 
   isValidAnswer: (answerId) ->
     for correctAnswer in @correctAnswerIds \

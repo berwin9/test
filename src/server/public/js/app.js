@@ -8,6 +8,27 @@
 }).call(this);
 
 (function() {
+  angular.module('test').directive('testMarkdown', function() {
+    var renderMarkdown;
+    renderMarkdown = function(text) {
+      return markdown.toHTML(text);
+    };
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        var $elem;
+        $elem = angular.element(elem);
+        $elem.html(renderMarkdown(attrs.testMarkdown));
+        return attrs.$observe('testMarkdown', function(newValue, oldValue) {
+          return $elem.html(renderMarkdown(newValue));
+        });
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
   angular.module('test').controller('NotificationCtrl', [
     '$timeout', 'BootstrapService', function($timeout, BootstrapService) {
       var reduceAlerts,
@@ -119,9 +140,12 @@
       this.possibleAnswerIds = null;
       this.correctAnswerIds = null;
       this.userAnswerId = null;
+      this._isValid = false;
     }
 
-    QuizItemModel.prototype.validate = function() {};
+    QuizItemModel.prototype.validate = function() {
+      return this._isValid = this.isValidAnswer(this.userAnswerId);
+    };
 
     QuizItemModel.prototype.isAnswered = function() {
       return this.userQuizItemAnserModel != null;
@@ -144,7 +168,7 @@
     };
 
     QuizItemModel.prototype.isValid = function() {
-      return this.isValidAnswer(this.userAnswerId);
+      return this._isValid;
     };
 
     QuizItemModel.prototype.isValidAnswer = function(answerId) {
@@ -274,7 +298,9 @@
         }
         return validAnswers;
       };
-      this.isValidAnswer = function(quizModel, answerModel) {};
+      this.isValidAnswer = function(quizModel, answerModel) {
+        return quizModel.isValidAnswer(answerModel.id);
+      };
       goToIntro = function() {
         return _this.resetQuiz();
       };
