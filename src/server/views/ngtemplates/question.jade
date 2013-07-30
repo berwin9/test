@@ -10,7 +10,7 @@ script(type="text/ng-template", id="question.html")
         li.previous
           a.fui-arrow-left(href="#", "data-ng-click"="slide.onPrevIndexClick()")
         li(
-          "data-ng-repeat"="quizItem in slide.quizItems",
+          "data-ng-repeat"="quizItemModel in slide.quizItems",
           "data-ng-class"="{ 'active': slide.isActiveIndex($index) }"
         )
           a(href="#", "data-ng-bind"="$index + 1", "data-ng-click"="slide.onSlideIndexClick($index)")

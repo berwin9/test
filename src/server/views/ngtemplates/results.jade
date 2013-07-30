@@ -1,15 +1,30 @@
 script(type="text/ng-template", id="results.html")
-  h2 Results
-  .alert("data-ng-bind"="'you got ' + slide.sumCorrectAnswers() + ' out of ' + slide.quizItems.length + ' answers correct.'")
+  #results("data-ng-controller"="ResultsCtrl as result")
+    .row
+      a.btn.btn-success.pull-right(
+        href="#",
+        "data-ng-click"="slide.setPageTemplate(slide.pageTemplates.intro)"
+      ) Reset
 
-  .row("data-ng-repeat"="quizItem in slides.quizItems")
-    h4("data-ng-bind"="'Question number: ' + (slide.curActiveQuizIndex + 1)")
-    span('data-ng-bind'="slide.curQuizItem.question")
-    .well
-      ol(type="a")
-        li(
-          "data-ng-repeat"="answerModel in slide.getPossibleAnswersByIds(slide.curQuizItem.possibleAnswerIds)",
-          "data-ng-class"="{ 'alert-success well-small': slide.curQuizItem.userAnswerId === answerModel.id }",
-          "data-ng-click"="slide.setAnswer(answerModel.id)"
-        )
-          span("data-ng-bind"="answerModel.answer")
+    .row
+      h2 Results
+      .alert
+        span("data-ng-bind"="'you got ' + slide.sumCorrectAnswers() + ' out of ' + slide.quizItems.length + ' answers correct.'")
+
+    .row.answer-row("data-ng-repeat"="quizItemModel in slide.quizItems")
+      h4("data-ng-bind"="'Question number: ' + ($index + 1)")
+      .row
+        button.btn-mini.btn-success.pull-left(
+          href="#",
+          "data-ng-click"="result.toggleHide($index)",
+          "data-ng-bind"="result.isHidden($index) ? 'show' : 'hide'"
+        ) 
+      .row
+        span('data-ng-bind'="quizItemModel.question")
+        .well("data-ng-hide"="result.isHidden($index)")
+          ol(type="a")
+            li(
+              "data-ng-repeat"="answerModel in slide.getPossibleAnswersByIds(slide.curQuizItem.possibleAnswerIds)",
+              "data-ng-class"="{ 'alert-success well-small': slide.isValidAnswer(quizItemModel, answerModel) }"
+            )
+              span("data-ng-bind"="answerModel.answer")

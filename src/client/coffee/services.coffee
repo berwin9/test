@@ -41,6 +41,7 @@ angular.module('test')
 
 
 class QuizItemModel
+
   constructor: (@id, @question, @orderNumber) ->
     @possibleAnswerIds = null
     @correctAnswerIds = null
@@ -63,6 +64,7 @@ class QuizItemModel
     when correctAnswer is @userAnswerId
       return true
     return false
+
 
 class QuizItemAnswerModel
   constructor: (@id, @answer) ->

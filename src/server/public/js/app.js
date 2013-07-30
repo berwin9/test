@@ -285,6 +285,19 @@
       };
       return this;
     }
-  ]);
+  ]).controller('ResultsCtrl', function() {
+    var showIndexes,
+      _this = this;
+    showIndexes = {};
+    this.isHidden = function(index) {
+      if (showIndexes[index] != null) {
+        return !showIndexes[index];
+      }
+      return !(showIndexes[index] = false);
+    };
+    return this.toggleHide = function(index) {
+      return showIndexes[index] = !showIndexes[index];
+    };
+  });
 
 }).call(this);

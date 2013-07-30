@@ -9,7 +9,7 @@ initQuizDecorator = (ctrl) ->
 
 angular.module('test')
 
-  .controller 'SlideCtrl', ['$scope', 'QuizItemModelsService',
+  .controller('SlideCtrl', ['$scope', 'QuizItemModelsService',
     ($scope, QuizItemModelsService) ->
       @pageTemplates =
         intro: 'intro.html'
@@ -78,4 +78,16 @@ angular.module('test')
       # when using angulars `controller as` syntax so we need to explicitly
       # return the controller instance
       @
-  ]
+  ])
+
+  .controller('ResultsCtrl', ->
+    showIndexes = {}
+
+    @isHidden = (index) =>
+      if showIndexes[index]?
+        return not showIndexes[index]
+      return not showIndexes[index] = false
+
+    @toggleHide = (index) => showIndexes[index] = not showIndexes[index]
+
+  )
