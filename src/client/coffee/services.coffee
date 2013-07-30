@@ -14,6 +14,7 @@ angular.module('test')
       get: ->
         $http.get(quizItemModelsUrl).then (response) ->
           quizItemModels = []
+          # build the models and cache them so we can just look it up later on
           for quizItem in response.data
             quizItemModel = new Models.QuizItemModel(
               quizItem._id,

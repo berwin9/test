@@ -92,5 +92,4 @@ angular.module('test')
       return not showIndexes[index] = false
 
     @toggleHide = (index) => showIndexes[index] = not showIndexes[index]
-
   )

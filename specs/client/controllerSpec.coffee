@@ -19,19 +19,22 @@ describe 'controllers', ->
       $httpBackend.whenGET().respond fakePayload
 
       quizItems = [
-        new Models.QuizItemModel(1, 'what is your item model number?', 1)
-        new Models.QuizItemModel(2, 'what is your item model number?', 2)
+        new Models.QuizItemModel('1', '1?', 1)
+        new Models.QuizItemModel('2', '2?', 2)
+        new Models.QuizItemModel('3', '3?', 3)
       ]
       quizAnswers = [
         new Models.QuizItemAnswerModel(1, '1')
         new Models.QuizItemAnswerModel(1, '2')
+        new Models.QuizItemAnswerModel(1, '3')
       ]
       quizItem.setPossibleAnswerIds([1, 2]) for quizItem in quizItems
       quizItem.setCorrectAnswerIds([index]) for quizItem, index in quizItems
 
       $httpBackend.expectGET().respond(fakePayload)
 
-      methodSpy = spyOn(QuizItemModelsService, 'get').andCallThrough()
+      methodSpy = spyOn(QuizItemModelsService, 'get')
+        .andCallThrough(then: (cb) -> cb quizItems)
       scope = $rootScope.$new()
       slide = $controller(
         'SlideCtrl',
@@ -53,6 +56,52 @@ describe 'controllers', ->
       $httpBackend.flush()
       expect(slide.quizItems).not.toBe null
 
-    it 'should go to the first item', ->
+    it 'should set the active model by index', ->
       expect(slide.curActiveQuizIndex).toBe null
+      $httpBackend.flush()
+      slide.setActiveModelByIndex 2
+      expect(slide.curActiveQuizIndex).toBe 2
+      expect(slide.curQuizItem.id).toBe quizItems[2].id
 
+
+    it 'should set the correct active model when clicking on the pagination', ->
+      expect(slide.curActiveQuizIndex).toBe null
+      $httpBackend.flush()
+      slide.onSlideIndexClick 2
+      expect(slide.curActiveQuizIndex).toBe 2
+      expect(slide.curQuizItem.id).toBe quizItems[2].id
+
+    it 'should go to the next question when the next button is clicked', ->
+      expect(slide.curActiveQuizIndex).toBe null
+      $httpBackend.flush()
+      slide.onNextIndexClick()
+      expect(slide.curActiveQuizIndex).toBe 0
+      expect(slide.curQuizItem.id).toBe quizItems[0].id
+      slide.onNextIndexClick()
+      expect(slide.curActiveQuizIndex).toBe 1
+      expect(slide.curQuizItem.id).toBe quizItems[1].id
+
+    it 'should go to the previous question when the next button is clicked', ->
+      expect(slide.curActiveQuizIndex).toBe null
+      $httpBackend.flush()
+      slide.setActiveModelByIndex 2
+      slide.onPrevIndexClick()
+      expect(slide.curActiveQuizIndex).toBe 1
+      expect(slide.curQuizItem.id).toBe quizItems[1].id
+
+    it 'should not go out of bounds of the arrays length when next is clicked', ->
+      $httpBackend.flush()
+      max = slide.quizItems.length - 1
+      slide.setActiveModelByIndex max
+      slide.onNextIndexClick()
+      slide.onNextIndexClick()
+      expect(slide.curActiveQuizIndex).toBe max
+      expect(slide.curQuizItem.id).toBe quizItems[max].id
+      slide.setActiveModelByIndex max
+
+    it 'should not go out of bounds of the arrays length when prev is clicked', ->
+      $httpBackend.flush()
+      for item in [0..slide.quizItems.length + 1]
+        slide.onPrevIndexClick()
+        expect(slide.curActiveQuizIndex).toBe 0
+        expect(slide.curQuizItem.id).toBe quizItems[0].id
