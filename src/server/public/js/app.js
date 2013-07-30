@@ -79,7 +79,7 @@
       }
     };
   }).factory('QuizItemModelsService', [
-    '$http', 'quizItemModelsUrl', function($http, quizItemModelsUrl) {
+    '$http', 'quizItemModelsUrl', 'Models', function($http, quizItemModelsUrl, Models) {
       var _quizItemAnswersModelCache, _quizItemModelCache;
       _quizItemModelCache = {};
       _quizItemAnswersModelCache = {};
@@ -91,12 +91,12 @@
             _ref = response.data;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               quizItem = _ref[_i];
-              quizItemModel = new QuizItemModel(quizItem._id, quizItem.question, quizItem.orderNumber);
+              quizItemModel = new Models.QuizItemModel(quizItem._id, quizItem.question, quizItem.orderNumber);
               possibleAnswerIds = [];
               _ref1 = quizItem.possibleAnswers;
               for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
                 answerItem = _ref1[_j];
-                quizItemAnswerModel = new QuizItemAnswerModel(answerItem._id, answerItem.answer);
+                quizItemAnswerModel = new Models.QuizItemAnswerModel(answerItem._id, answerItem.answer);
                 possibleAnswerIds.push(quizItemAnswerModel.id);
                 _quizItemAnswersModelCache[quizItemAnswerModel.id] = quizItemAnswerModel;
               }

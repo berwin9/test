@@ -6,40 +6,41 @@ angular.module('test')
     get: ->
       window.__bootstrapData.notifications if window.__bootstrapData?
 
-  .factory('QuizItemModelsService', ['$http', 'quizItemModelsUrl', ($http, quizItemModelsUrl) ->
-    _quizItemModelCache = {}
-    _quizItemAnswersModelCache = {}
+  .factory('QuizItemModelsService', ['$http', 'quizItemModelsUrl', 'Models',
+    ($http, quizItemModelsUrl, Models) ->
+      _quizItemModelCache = {}
+      _quizItemAnswersModelCache = {}
 
-    get: ->
-      $http.get(quizItemModelsUrl).then (response) ->
-        quizItemModels = []
-        for quizItem in response.data
-          quizItemModel = new QuizItemModel(
-            quizItem._id,
-            quizItem.question,
-            quizItem.orderNumber
-          )
-
-          possibleAnswerIds = []
-          for answerItem in quizItem.possibleAnswers
-            quizItemAnswerModel = new QuizItemAnswerModel(
-              answerItem._id,
-              answerItem.answer
+      get: ->
+        $http.get(quizItemModelsUrl).then (response) ->
+          quizItemModels = []
+          for quizItem in response.data
+            quizItemModel = new Models.QuizItemModel(
+              quizItem._id,
+              quizItem.question,
+              quizItem.orderNumber
             )
-            possibleAnswerIds.push quizItemAnswerModel.id
-            _quizItemAnswersModelCache[quizItemAnswerModel.id] = quizItemAnswerModel
 
-          _quizItemModelCache[quizItemModel.id] = quizItemModel
-          quizItemModel.setPossibleAnswerIds possibleAnswerIds
-          quizItemModel.setCorrectAnswerIds(
-            (correctAnswer._id for correctAnswer in quizItem.correctAnswers)
-          )
-          quizItemModels.push quizItemModel
+            possibleAnswerIds = []
+            for answerItem in quizItem.possibleAnswers
+              quizItemAnswerModel = new Models.QuizItemAnswerModel(
+                answerItem._id,
+                answerItem.answer
+              )
+              possibleAnswerIds.push quizItemAnswerModel.id
+              _quizItemAnswersModelCache[quizItemAnswerModel.id] = quizItemAnswerModel
 
-        quizItemModels
+            _quizItemModelCache[quizItemModel.id] = quizItemModel
+            quizItemModel.setPossibleAnswerIds possibleAnswerIds
+            quizItemModel.setCorrectAnswerIds(
+              (correctAnswer._id for correctAnswer in quizItem.correctAnswers)
+            )
+            quizItemModels.push quizItemModel
 
-    getAnswerModelsByIds: (ids) ->
-      (_quizItemAnswersModelCache[id] for id in ids)
+          quizItemModels
+
+      getAnswerModelsByIds: (ids) ->
+        (_quizItemAnswersModelCache[id] for id in ids)
   ])
 
   .factory('Models', ->

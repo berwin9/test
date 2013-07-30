@@ -79,20 +79,20 @@ module.exports = (grunt) ->
 
     karma:
       options:
-        configFile: './config/karma.conf.js',
-        runnerPort: 9999,
+        configFile: './config/karma.conf.js'
+        runnerPort: 9999
         reporters: ['dots']
         colors: true
       e2e:
-        configFile: './config/karma-e2e.conf.js',
-        singleRun: true,
+        configFile: './config/karma-e2e.conf.js'
+        singleRun: true
         autoWatch: true
       e2elive:
         configFile: './config/karma-e2e.conf.js'
       unit:
         singleRun: true
       dev:
-        autoWatch: true,
+        autoWatch: true
         browsers: ['Chrome']
 
   grunt.loadNpmTasks 'grunt-contrib-watch'
