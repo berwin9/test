@@ -19,6 +19,7 @@ angular.module('test')
             quizItem.question,
             quizItem.orderNumber
           )
+
           possibleAnswerIds = []
           for answerItem in quizItem.possibleAnswers
             quizItemAnswerModel = new QuizItemAnswerModel(
@@ -27,12 +28,14 @@ angular.module('test')
             )
             possibleAnswerIds.push quizItemAnswerModel.id
             _quizItemAnswersModelCache[quizItemAnswerModel.id] = quizItemAnswerModel
+
           _quizItemModelCache[quizItemModel.id] = quizItemModel
           quizItemModel.setPossibleAnswerIds possibleAnswerIds
           quizItemModel.setCorrectAnswerIds(
             (correctAnswer._id for correctAnswer in quizItem.correctAnswers)
           )
           quizItemModels.push quizItemModel
+
         quizItemModels
 
     getAnswerModelsByIds: (ids) ->

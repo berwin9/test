@@ -117,7 +117,7 @@ module.exports = (app) ->
                 return this.message
               }
               this.message = "Message two!"
-              this.getMessage = function() { return message }  
+              this.getMessage = function() { return message }
 
               function() {
                 {

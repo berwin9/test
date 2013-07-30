@@ -27,7 +27,7 @@ script(type="text/ng-template", id="question.html")
     div(data-test-markdown="{{ slide.curQuizItem.question }}")
     .well
       ol(type="a")
-        li(
+        li.answer(
           data-ng-repeat="answerModel in slide.getPossibleAnswersByIds(slide.curQuizItem.possibleAnswerIds)",
           data-ng-class="{ 'alert-success well-small': slide.curQuizItem.userAnswerId === answerModel.id }",
           data-ng-click="slide.setAnswer(answerModel.id)"
