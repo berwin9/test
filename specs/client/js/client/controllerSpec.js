@@ -57,14 +57,16 @@
         $httpBackend.flush();
         slide.setActiveModelByIndex(2);
         expect(slide.curActiveQuizIndex).toBe(2);
-        return expect(slide.curQuizItem.id).toBe(quizItems[2].id);
+        expect(slide.curQuizItem.id).toBe(quizItems[2].id);
+        return expect(slide.curQuizItem.id).toBe(slide.quizItems[2].id);
       });
       it('should set the correct active model when clicking on the pagination', function() {
         expect(slide.curActiveQuizIndex).toBe(null);
         $httpBackend.flush();
         slide.onSlideIndexClick(2);
         expect(slide.curActiveQuizIndex).toBe(2);
-        return expect(slide.curQuizItem.id).toBe(quizItems[2].id);
+        expect(slide.curQuizItem.id).toBe(quizItems[2].id);
+        return expect(slide.curQuizItem.id).toBe(slide.quizItems[2].id);
       });
       it('should go to the next question when the next button is clicked', function() {
         expect(slide.curActiveQuizIndex).toBe(null);
@@ -72,9 +74,11 @@
         slide.onNextIndexClick();
         expect(slide.curActiveQuizIndex).toBe(0);
         expect(slide.curQuizItem.id).toBe(quizItems[0].id);
+        expect(slide.curQuizItem.id).toBe(slide.quizItems[0].id);
         slide.onNextIndexClick();
         expect(slide.curActiveQuizIndex).toBe(1);
-        return expect(slide.curQuizItem.id).toBe(quizItems[1].id);
+        expect(slide.curQuizItem.id).toBe(quizItems[1].id);
+        return expect(slide.curQuizItem.id).toBe(slide.quizItems[1].id);
       });
       it('should go to the previous question when the next button is clicked', function() {
         expect(slide.curActiveQuizIndex).toBe(null);
@@ -82,7 +86,8 @@
         slide.setActiveModelByIndex(2);
         slide.onPrevIndexClick();
         expect(slide.curActiveQuizIndex).toBe(1);
-        return expect(slide.curQuizItem.id).toBe(quizItems[1].id);
+        expect(slide.curQuizItem.id).toBe(quizItems[1].id);
+        return expect(slide.curQuizItem.id).toBe(slide.quizItems[1].id);
       });
       it('should not go out of bounds of the arrays length when next is clicked', function() {
         var max;
@@ -95,7 +100,7 @@
         expect(slide.curQuizItem.id).toBe(quizItems[max].id);
         return slide.setActiveModelByIndex(max);
       });
-      return it('should not go out of bounds of the arrays length when prev is clicked', function() {
+      it('should not go out of bounds of the arrays length when prev is clicked', function() {
         var item, _i, _ref, _results;
         $httpBackend.flush();
         _results = [];
@@ -105,6 +110,72 @@
           _results.push(expect(slide.curQuizItem.id).toBe(quizItems[0].id));
         }
         return _results;
+      });
+      it('should check if current index is the active index', function() {
+        $httpBackend.flush();
+        slide.setActiveModelByIndex(2);
+        expect(slide.isActiveIndex(2)).toBe(true);
+        return expect(slide.isActiveIndex(1)).toBe(false);
+      });
+      it('should set the current answer for the model', function() {
+        $httpBackend.flush();
+        slide.setActiveModelByIndex(1);
+        expect(slide.curQuizItem.userAnswerId).toBe(null);
+        slide.setAnswer('1');
+        return expect(slide.curQuizItem.userAnswerId).toBe('1');
+      });
+      it('should check if the current answer is the valid one for this quiz model', function() {
+        $httpBackend.flush();
+        slide.setActiveModelByIndex(1);
+        expect(slide.isValidAnswer(slide.quizItems[1], quizItems[1])).toBe(true);
+        return expect(slide.isValidAnswer(slide.quizItems[1], quizItems[2])).toBe(false);
+      });
+      it('should sum the correct answers', function() {
+        $httpBackend.flush();
+        slide.setActiveModelByIndex(1);
+        slide.setAnswer('2');
+        slide.setPageTemplate(slide.pageTemplates.results);
+        return expect(slide.sumCorrectAnswers()).toBe(1);
+      });
+      it('should start quiz at model 0 when `initQuiz` is called', function() {
+        $httpBackend.flush();
+        slide.setPageTemplate(slide.pageTemplates.results);
+        slide.setActiveModelByIndex(2);
+        expect(slide.curActiveQuizIndex).toBe(2);
+        slide.initQuiz();
+        return expect(slide.curActiveQuizIndex).toBe(0);
+      });
+      describe('template switch', function() {
+        beforeEach(function() {
+          return $httpBackend.flush();
+        });
+        it('should set the correct page template type', function() {
+          slide.setPageTemplate(slide.pageTemplates.intro);
+          expect(slide.curPageTemplate).toBe(slide.pageTemplates.intro);
+          slide.setPageTemplate(slide.pageTemplates.results);
+          return expect(slide.curPageTemplate).toBe(slide.pageTemplates.results);
+        });
+        it('should reset the quiz when template is switched to intro', function() {
+          slide.setActiveModelByIndex(1);
+          slide.setAnswer('1');
+          expect(slide.curQuizItem.userAnswerId).toBe('1');
+          slide.setPageTemplate(slide.pageTemplates.intro);
+          return expect(slide.quizItems[1].userAnswerId).toBe(null);
+        });
+        return it('should validate models when user jumps to results', function() {
+          slide.setActiveModelByIndex(1);
+          slide.setAnswer('2');
+          expect(slide.curQuizItem.isValid()).toBe(false);
+          slide.setPageTemplate(slide.pageTemplates.results);
+          return expect(slide.curQuizItem.isValid()).toBe(true);
+        });
+      });
+      return it('should retrieve the associated possible answer models for this current quiz model', function() {
+        var results;
+        $httpBackend.flush();
+        results = slide.getPossibleAnswersByIds([1, 2]);
+        expect(results[0].id).toBe('1');
+        return expect(results[1].id).toBe('2');
       });
     });
   });
