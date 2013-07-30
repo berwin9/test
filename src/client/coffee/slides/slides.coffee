@@ -77,7 +77,7 @@ angular.module('test')
 
       goToResults = => quizItem.validate() for quizItem in @quizItems
 
-      # because of coffeescripts implied return at end, this causes bugs
+      # coffeescripts implied return causes bugs (caused by promises being the last expression)
       # when using angulars `controller as` syntax so we need to explicitly
       # return the controller instance
       @

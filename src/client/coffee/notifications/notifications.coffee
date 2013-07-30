@@ -8,7 +8,7 @@ angular.module('test')
 
       @close = (index) => @alerts.splice(index, 1)
 
-      # coffeescripts implied return causes bugs
+      # coffeescripts implied return causes bugs (caused by promises being the last expression)
       # when using angulars `controller as` syntax so we need to explicitly
       # return the controller instance
       @
