@@ -18,7 +18,7 @@ html(class="no-js", lang="en")
     script.
       var __bootstrapData = !{JSON.stringify(bootstrap || null)};
 
-  body(data-ng-app="test", data-ng-controller="AppCtrl as app")
+  body(data-ng-app="test", data-ng-controller="AppCtrl as app", data-ng-cloak)
     .navbar.navbar-fixed-top.navbar-inverse
       .navbar-inner
         .container
@@ -26,9 +26,9 @@ html(class="no-js", lang="en")
             ul.nav
               li
                 a(href="#") Quizerfoo
-          ul.nav.nav-pills.pull-right
+          ul.pull-right
             li
-              a(href='/logout') Logout
+              a.btn.btn-primary(href='/logout') Logout
 
     #notifications-container(
       data-ng-controller="NotificationCtrl as notification",
@@ -42,7 +42,7 @@ html(class="no-js", lang="en")
         button.close(type="button", data-ng-click="notification.close($index)") x
         strong(data-ng-bind="item.message")
 
-    .container
+    .container-narrow
       block content
     script(src="/js/libs.js")
     script(src="/js/app.js")

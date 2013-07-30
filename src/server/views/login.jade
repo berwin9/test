@@ -26,8 +26,9 @@ block content
               input(type="checkbox", id="login-remember", name="login-remember")
           input.btn.btn-primary(type="submit", value="Login")
 
+   .row
     .span6
-      form#register-form.pull-right(method="POST", action="/register")
+      form#register-form(method="POST", action="/register")
         legend Registration Form
 
         .control-group

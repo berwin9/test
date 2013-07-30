@@ -61,14 +61,25 @@ module.exports = (grunt) ->
         'src/client/coffee/**/*.coffee'
       ]
 
+    regarde:
+      coffee:
+        files: ['src/client/coffee/**/*.coffee']
+        tasks: ['cs']
+      less:
+        files: ['src/client/styles/**/*.less']
+        tasks: ['less:prod']
+
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-regarde'
+  grunt.loadNpmTasks 'grunt-karma'
 
   grunt.registerTask 'cs', ['copy:coffee', 'coffee', 'concat:js']
   grunt.registerTask 'production', ['default', 'clean:sourceMaps']

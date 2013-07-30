@@ -1,5 +1,10 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
+  include ngtemplates/slides
+  include ngtemplates/question
+  include ngtemplates/intro
+  include ngtemplates/results
+
+  #slides-container(data-ng-include="'slides.html'")

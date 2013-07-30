@@ -1,3 +1,9 @@
+haml = require 'hamljs'
+parse = require('url').parse
+join = require('path').join
+fs = require 'fs'
+
+
 class Notification
   constructor: (@type, @message) ->
 
@@ -15,36 +21,37 @@ notifications =
     'Account creation failed on Registration Form.'
   )
 
-authenticate = (req, res, user) ->
-  remember = req.body['login-remember']?
-  req.session.userId = user.id
-  if remember
-    loginToken = new app.LoginTokenModel(email: user.email)
-    loginToken.save ->
-      # 2 week expiration for the loginToken
-      res.cookie 'loginToken', loginToken.cookieValue,
-        expires: new Date(Date.now() + (2 * 604800000))
-        path: '/'
-  res.redirect '/'
-
-badEmailOrPassword = (req, res) ->
-  res.render 'login.jade',
-    bootstrap:
-      notifications: [notifications.badEmailOrPassword]
-
-noUserFound = (req, res) ->
-  res.render 'login.jade',
-    bootstrap:
-      notifications: [notifications.noUserFound]
-
-accountCreationFailed = (req, res) ->
-  res.render 'login.jade',
-    bootstrap:
-      notifications: [notifications.accountCreationFailed]
-
-
 module.exports = (app) ->
   routes = {}
+
+  authenticate = (req, res, user) ->
+    remember = req.body['login-remember']?
+    req.session.userId = user.id
+    if remember
+      loginToken = new app.LoginTokenModel(email: user.email)
+      loginToken.save ->
+        # 2 week expiration for the loginToken
+        res.cookie 'loginToken', loginToken.cookieValue,
+          expires: new Date(Date.now() + (2 * 604800000))
+          path: '/'
+        res.redirect '/'
+    else
+      res.redirect '/'
+
+  badEmailOrPassword = (req, res) ->
+    res.render 'login.jade',
+      bootstrap:
+        notifications: [notifications.badEmailOrPassword]
+
+  noUserFound = (req, res) ->
+    res.render 'login.jade',
+      bootstrap:
+        notifications: [notifications.noUserFound]
+
+  accountCreationFailed = (req, res) ->
+    res.render 'login.jade',
+      bootstrap:
+        notifications: [notifications.accountCreationFailed]
 
   routes.index = (req, res) ->
     res.render 'index.jade'
@@ -78,7 +85,8 @@ module.exports = (app) ->
       if err? then return accountCreationFailed req, res
       authenticate(req, res, user)
 
-  routes.throwError = (req, res) ->
-    throw Error()
+  routes.getQuestions = (req, res) ->
+    app.QuizItemModel.find().exec (err, data) ->
+      res.json(data)
 
   routes
